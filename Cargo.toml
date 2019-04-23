@@ -1,0 +1,37 @@
+[package]
+name = "test-env-log"
+version = "0.0.0"
+authors = ["Daniel Mueller <deso@posteo.net>"]
+edition = "2018"
+license = "GPL-3.0-or-later"
+homepage = "https://github.com/d-e-s-o/test-env-log"
+repository = "https://github.com/d-e-s-o/test-env-log.git"
+readme = "README.md"
+categories = [
+  "development-tools::testing",
+  "development-tools",
+  "config",
+  "api-bindings",
+]
+keywords = [
+  "env_logger",
+  "log",
+  "logging",
+  "testing",
+  "tests",
+]
+description = """
+A replacement of the #[test] attribute that initializes the env_logger
+before running tests.
+"""
+
+[lib]
+proc-macro = true
+
+[dependencies]
+env_logger = {version = "0.6", default-features = false}
+quote = {version = "0.6"}
+syn = {version = "0.15", features = ["full"]}
+
+[dev-dependencies]
+log = "0.4"
