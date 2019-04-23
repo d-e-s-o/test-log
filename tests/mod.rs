@@ -23,3 +23,25 @@ fn with_return_type() -> Result<(), Error> {
 fn with_panic() {
   panic!("success")
 }
+
+mod local {
+  use super::Error;
+
+  use test_env_log::test;
+
+  #[test]
+  fn without_return_type() {
+    assert_eq!(2 + 2, 4);
+  }
+
+  #[test]
+  fn with_return_type() -> Result<(), Error> {
+    Ok(())
+  }
+
+  #[test]
+  #[should_panic(expected = "success")]
+  fn with_panic() {
+    panic!("success")
+  }
+}
