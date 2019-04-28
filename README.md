@@ -1,5 +1,7 @@
+[![pipeline](https://gitlab.com/d-e-s-o/test-env-log/badges/master/pipeline.svg)](https://gitlab.com/d-e-s-o/test-env-log/commits/master)
 [![crates.io](https://img.shields.io/crates/v/test-env-log.svg)](https://crates.io/crates/test-env-log)
 [![Docs](https://docs.rs/test-env-log/badge.svg)](https://docs.rs/test-env-log)
+[![rustc](https://img.shields.io/badge/rustc-1.32+-blue.svg)](https://blog.rust-lang.org/2019/01/17/Rust-1.32.0.html)
 
 test-env-log
 ============

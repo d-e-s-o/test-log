@@ -25,6 +25,9 @@ A replacement of the #[test] attribute that initializes the env_logger
 before running tests.
 """
 
+[badges]
+gitlab = { repository = "d-e-s-o/test-env-log", branch = "master" }
+
 [lib]
 proc-macro = true
 
