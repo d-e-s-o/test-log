@@ -6,6 +6,9 @@
 test-env-log
 ============
 
+- [Documentation][docs-rs]
+- [Changelog](CHANGELOG.md)
+
 **test-env-log** is a crate that takes care of automatically
 initializing `env_logger` for Rust tests.
 
@@ -53,3 +56,5 @@ fn it_still_works() {
   // ...
 }
 ```
+
+[docs-rs]: https://docs.rs/crate/test-env-log
