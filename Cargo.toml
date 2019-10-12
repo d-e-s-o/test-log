@@ -33,9 +33,9 @@ proc-macro = true
 
 [dependencies]
 env_logger = {version = "0.7", default-features = false}
-proc-macro2 = "0.4"
-quote = {version = "0.6"}
-syn = {version = "0.15", features = ["full"]}
+proc-macro2 = "1.0"
+quote = {version = "1.0"}
+syn = {version = "1.0", features = ["full"]}
 
 [dev-dependencies]
 log = "0.4"

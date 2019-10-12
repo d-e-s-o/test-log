@@ -87,9 +87,8 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
 // inner one. In your face.
 fn expand_wrapper(wrappee: &ItemFn) -> TokenStream {
   let attrs = &wrappee.attrs;
-  let decl = &wrappee.decl;
   let body = &wrappee.block;
-  let test_name = &wrappee.ident;
+  let test_name = &wrappee.sig.ident;
 
   // The type alias we use for the return type. Note that we cannot
   // simply use #test_name as a type of that name would clash with a
@@ -106,7 +105,7 @@ fn expand_wrapper(wrappee: &ItemFn) -> TokenStream {
   // that returns anything but (). Unfortunately, it does not check
   // whether a type alias actually just "expands" to (), but errors out.
   // So we need to special case that by referencing () directly.
-  let (alias_ref, ret_type) = match &decl.output {
+  let (alias_ref, ret_type) = match &wrappee.sig.output {
     ReturnType::Default => (
       quote! {()},
       quote! {()},
