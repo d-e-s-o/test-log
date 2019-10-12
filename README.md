@@ -57,4 +57,17 @@ fn it_still_works() {
 }
 ```
 
+As usual when running `cargo test`, the output is captured by the
+framework by default and only shown on test failure. The `--nocapture`
+argument can be supplied in order to overwrite this setting. E.g.,
+```bash
+$ cargo test -- --nocapture
+```
+
+Furthermore, by virtue of using `env_logger`, the `RUST_LOG` environment
+variable is honored and can be used to influence the log level to work
+with. Please refer to the [`env_logger` docs][env-docs-rs] for more
+information.
+
 [docs-rs]: https://docs.rs/crate/test-env-log
+[env-docs-rs]: https://docs.rs/env_logger/0.7.0/env_logger
