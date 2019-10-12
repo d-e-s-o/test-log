@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.1.1
+-----
 - Updated `README.md` with instructions on how to retrieve test output
   and change log level
 - Bumped `env_logger` dependency to `0.7`
