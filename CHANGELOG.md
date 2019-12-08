@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Bumped minimum required Rust version to `1.39.0`
+
+
 0.1.1
 -----
 - Updated `README.md` with instructions on how to retrieve test output
