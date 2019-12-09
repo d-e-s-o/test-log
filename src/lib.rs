@@ -87,6 +87,12 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
 // inner one. In your face.
 fn expand_wrapper(wrappee: &ItemFn) -> TokenStream {
   let attrs = &wrappee.attrs;
+  let async_ = &wrappee.sig.asyncness;
+  let await_ = if async_.is_some() {
+    quote! {.await}
+  } else {
+    quote! {}
+  };
   let body = &wrappee.block;
   let test_name = &wrappee.sig.ident;
 
@@ -117,7 +123,7 @@ fn expand_wrapper(wrappee: &ItemFn) -> TokenStream {
   };
 
   let result = quote! {
-    fn #test_name() -> #ret_type {
+    #async_ fn #test_name() -> #ret_type {
       #body
     }
 
@@ -128,9 +134,9 @@ fn expand_wrapper(wrappee: &ItemFn) -> TokenStream {
       use super::#test_name;
       #[test]
       #(#attrs)*
-      fn f() -> #alias_ref {
+      #async_ fn f() -> #alias_ref {
         let _ = ::env_logger::builder().is_test(true).try_init();
-        super::#test_name()
+        super::#test_name()#await_
       }
     }
   };
