@@ -24,6 +24,11 @@ fn with_panic() {
   panic!("success")
 }
 
+#[test_env_log::test(tokio::test)]
+async fn with_inner_test_attribute_and_async() {
+  assert_eq!(async { 42 }.await, 42)
+}
+
 mod local {
   use super::Error;
 
@@ -43,5 +48,10 @@ mod local {
   #[should_panic(expected = "success")]
   fn with_panic() {
     panic!("success")
+  }
+
+  #[test(tokio::test)]
+  async fn with_inner_test_attribute_and_async() {
+    assert_eq!(async { 42 }.await, 42)
   }
 }

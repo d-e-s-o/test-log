@@ -9,8 +9,13 @@ use proc_macro2::Span;
 
 use quote::quote;
 
+use syn::AttributeArgs;
 use syn::ItemFn;
+use syn::Meta;
+use syn::NestedMeta;
 use syn::parse_macro_input;
+use syn::parse_quote;
+use syn::Path;
 use syn::ReturnType;
 
 
@@ -54,16 +59,16 @@ use syn::ReturnType;
 /// ```
 #[proc_macro_attribute]
 pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
-  // Bail out if user tried to pass additional arguments. E.g.,
-  // #[test_env_log::test(foo = "bar")
-  if !attr.is_empty() {
-    panic!("unsupported attributes supplied: {}", attr);
-  }
-  // Make clippy happy.
-  drop(attr);
-
+  let args = parse_macro_input!(attr as AttributeArgs);
   let input = parse_macro_input!(item as ItemFn);
-  expand_wrapper(&input)
+
+  let inner_test = match args.as_slice() {
+    [] => parse_quote! { test },
+    [NestedMeta::Meta(Meta::Path(path))] => path.clone(),
+    _ => panic!("unsupported attributes supplied: {}", quote! { args }),
+  };
+
+  expand_wrapper(&inner_test, &input)
 }
 
 
@@ -85,7 +90,7 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
 // So instead, we introduce a type alias for the return type in the
 // outer module. Now we can reference only this type def from the
 // inner one. In your face.
-fn expand_wrapper(wrappee: &ItemFn) -> TokenStream {
+fn expand_wrapper(inner_test: &Path, wrappee: &ItemFn) -> TokenStream {
   let attrs = &wrappee.attrs;
   let async_ = &wrappee.sig.asyncness;
   let await_ = if async_.is_some() {
@@ -132,7 +137,7 @@ fn expand_wrapper(wrappee: &ItemFn) -> TokenStream {
 
     mod #test_name {
       use super::#test_name;
-      #[test]
+      #[#inner_test]
       #(#attrs)*
       #async_ fn f() -> #alias_ref {
         let _ = ::env_logger::builder().is_test(true).try_init();
