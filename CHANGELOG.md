@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.0
+-----
 - Added support for providing inner `#[test]` attribute
 - Bumped minimum required Rust version to `1.39.0`
 
