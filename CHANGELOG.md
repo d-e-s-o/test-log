@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Relicensed project under terms of `Apache-2.0 OR MIT`
+
+
 0.2.0
 -----
 - Added support for providing inner `#[test]` attribute
