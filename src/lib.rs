@@ -6,6 +6,7 @@ extern crate proc_macro;
 use proc_macro::TokenStream;
 use proc_macro2::Ident;
 use proc_macro2::Span;
+use proc_macro2::TokenStream as Tokens;
 
 use quote::quote;
 
@@ -32,8 +33,9 @@ use syn::ReturnType;
 /// # // doctests seemingly run in a slightly different environment where
 /// # // `super`, which is what our macro makes use of, is not available.
 /// # // By having a fake module here we work around that problem.
+/// # #[cfg(feature = "log")]
 /// # mod fordoctest {
-/// # use log::info;
+/// # use logging::info;
 /// # // Note that no test would actually run, regardless of `no_run`,
 /// # // because we do not invoke the function.
 /// #[test_env_log::test]
@@ -69,6 +71,35 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
   };
 
   expand_wrapper(&inner_test, &input)
+}
+
+
+/// Expand the initialization code for the `log` crate.
+fn expand_logging_init() -> Tokens {
+  #[cfg(feature = "log")]
+  quote! {
+    {
+      let _ = ::env_logger::builder().is_test(true).try_init();
+    }
+  }
+  #[cfg(not(feature = "log"))]
+  quote! {}
+}
+
+
+/// Expand the initialization code for the `tracing` crate.
+fn expand_tracing_init() -> Tokens {
+  #[cfg(feature = "trace")]
+  quote! {
+    let _guard = {
+      let subscriber = ::tracing_subscriber::FmtSubscriber::builder()
+        .with_env_filter(::tracing_subscriber::EnvFilter::from_default_env())
+        .finish();
+      ::tracing::subscriber::set_default(subscriber)
+    };
+  }
+  #[cfg(not(feature = "trace"))]
+  quote! {}
 }
 
 
@@ -127,6 +158,9 @@ fn expand_wrapper(inner_test: &Path, wrappee: &ItemFn) -> TokenStream {
     ),
   };
 
+  let logging_init = expand_logging_init();
+  let tracing_init = expand_tracing_init();
+
   let result = quote! {
     #async_ fn #test_name() -> #ret_type {
       #body
@@ -140,7 +174,9 @@ fn expand_wrapper(inner_test: &Path, wrappee: &ItemFn) -> TokenStream {
       #[#inner_test]
       #(#attrs)*
       #async_ fn f() -> #alias_ref {
-        let _ = ::env_logger::builder().is_test(true).try_init();
+        #logging_init
+        #tracing_init
+
         super::#test_name()#await_
       }
     }

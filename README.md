@@ -10,21 +10,27 @@ test-env-log
 - [Changelog](CHANGELOG.md)
 
 **test-env-log** is a crate that takes care of automatically
-initializing `env_logger` for Rust tests.
+initializing logging and/or tracing for Rust tests.
 
 When running Rust tests it can often be helpful to have easy access to
-the verbose log messages emitted by the code under test. Assuming said
-code uses the [`log`](https://crates.io/crates/log) backend for its
-logging purposes that may not be straight forward, however. The problem
-is that all crates making use of `log` require some form of
-initialization to be usable.
+the verbose log messages emitted by the code under test. Commonly, these
+log messages may be coming from the [`log`][log] crate or being emitted
+through the [`tracing`][tracing] infrastructure.
 
-The commonly used [`env_logger`](https://crates.io/crates/env_logger),
-for example, needs to be initialized like this:
+The problem with either -- in the context of testing -- is that some
+form of initialization is required in order to make these crate's
+messages appear on a standard output stream.
+
+The commonly used [`env_logger`](https://crates.io/crates/env_logger)
+(which provides an easy way to configure `log` based logging), for
+example, needs to be initialized like this:
 ```rust
 let _ = env_logger::builder().is_test(true).try_init();
 ```
 in **each and every** test.
+
+Similarly, `tracing` based solutions require a subscriber to be
+registered that writes events/spans to the console.
 
 This crate takes care of this per-test initialization in an intuitive
 way.
@@ -34,8 +40,11 @@ Usage
 -----
 
 The crate provides a custom `#[test]` attribute that, when used for
-running a particular test, takes care of initializing `env_logger`
-beforehand.
+running a particular test, takes care of initializing `log` and/or
+`tracing` beforehand.
+
+#### Example
+
 As such, usage is as simple as importing and using said attribute:
 ```rust
 use test_env_log::test;
@@ -57,6 +66,9 @@ fn it_still_works() {
 }
 ```
 
+
+#### Logging Configuration
+
 As usual when running `cargo test`, the output is captured by the
 framework by default and only shown on test failure. The `--nocapture`
 argument can be supplied in order to overwrite this setting. E.g.,
@@ -64,10 +76,36 @@ argument can be supplied in order to overwrite this setting. E.g.,
 $ cargo test -- --nocapture
 ```
 
-Furthermore, by virtue of using `env_logger`, the `RUST_LOG` environment
-variable is honored and can be used to influence the log level to work
-with. Please refer to the [`env_logger` docs][env-docs-rs] for more
+Furthermore, the `RUST_LOG` environment variable is honored and can be
+used to influence the log level to work with (among other things).
+Please refer to the [`env_logger` docs][env-docs-rs] for more
 information.
+
+
+#### Features
+
+The crate comes with two features:
+- `log`, enabled by default, controls initialization for the `log`
+  crate.
+- `trace`, disabled by default, controls initialization for the
+  `tracing` crate.
+
+Depending on what backend the crate-under-test (and its dependencies)
+use, the respective feature should be enabled to make messages that are
+emitted by the test manifest on the console.
+
+Note that as a user you are required to explicitly add `env_logger` or
+`tracing-subscriber` as a dependency to your project-under-test (when
+enabling the `log` or `trace` feature, respectively). E.g.,
+
+```toml
+[dependencies]
+env_logger = "*"
+tracing-subscriber = {version = "0.1.6", features = ["chrono", "env-filter", "fmt"]}
+```
+
 
 [docs-rs]: https://docs.rs/crate/test-env-log
 [env-docs-rs]: https://docs.rs/env_logger/0.7.0/env_logger
+[log]: https://crates.io/crates/log
+[tracing]: https://crates.io/crates/tracing

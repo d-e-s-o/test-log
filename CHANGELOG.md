@@ -1,5 +1,8 @@
 Unreleased
 ----------
+- Added support for initializing `tracing` infrastructure
+  - Introduced `log` (enabled by default) and `trace` features (disabled
+    by default)
 - Dropped `env_logger` dependency
 
 
