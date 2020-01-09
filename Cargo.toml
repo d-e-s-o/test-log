@@ -32,11 +32,11 @@ gitlab = { repository = "d-e-s-o/test-env-log", branch = "master" }
 proc-macro = true
 
 [dependencies]
-env_logger = {version = "0.7", default-features = false}
 proc-macro2 = "1.0"
 quote = {version = "1.0"}
 syn = {version = "1.0", features = ["full"]}
 
 [dev-dependencies]
+env_logger = {version = "0.7", default-features = false}
 log = "0.4"
 tokio = {version = "0.2", default-features = false, features = ["rt-core", "macros"]}

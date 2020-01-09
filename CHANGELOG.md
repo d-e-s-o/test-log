@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Dropped `env_logger` dependency
+
+
 0.2.1
 -----
 - Relicensed project under terms of `Apache-2.0 OR MIT`
