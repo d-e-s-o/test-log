@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.2
+-----
 - Added support for initializing `tracing` infrastructure
   - Introduced `log` (enabled by default) and `trace` features (disabled
     by default)
