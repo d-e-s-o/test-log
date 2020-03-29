@@ -27,8 +27,7 @@ use syn::ReturnType;
 ///
 /// # Example
 ///
-/// Test functionality on an arbitrary Nitrokey device (i.e., Pro or
-/// Storage):
+/// Specify the attribute on a per-test basis:
 /// ```rust
 /// # // doctests seemingly run in a slightly different environment where
 /// # // `super`, which is what our macro makes use of, is not available.
