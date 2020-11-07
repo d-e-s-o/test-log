@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Bumped minimum supported Rust version to `1.42`
+
+
 0.2.2
 -----
 - Added support for initializing `tracing` infrastructure
