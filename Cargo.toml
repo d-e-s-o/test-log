@@ -47,4 +47,4 @@ logging = {version = "0.4", package = "log"}
 tokio = {version = "0.2", default-features = false, features = ["rt-core", "macros"]}
 tracing = {version = "0.1"}
 tracing-futures = {version = "0.2", default-features = false, features = ["std-future"]}
-tracing-subscriber = {version = "0.1.6", default-features = false, features = ["env-filter", "fmt"]}
+tracing-subscriber = {version = "0.2", default-features = false, features = ["env-filter", "fmt"]}
