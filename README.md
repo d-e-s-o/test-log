@@ -99,7 +99,7 @@ Note that as a user you are required to explicitly add `env_logger` or
 enabling the `log` or `trace` feature, respectively). E.g.,
 
 ```toml
-[dependencies]
+[dev-dependencies]
 env_logger = "*"
 tracing-subscriber = {version = "0.2", features = ["chrono", "env-filter", "fmt"]}
 ```
