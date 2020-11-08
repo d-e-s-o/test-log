@@ -50,7 +50,7 @@ async fn instrumented(input: usize) -> usize {
 
 #[test_env_log::test]
 fn trace_with_custom_runtime() {
-  let mut rt = Builder::new().basic_scheduler().build().unwrap();
+  let rt = Builder::new_current_thread().build().unwrap();
 
   rt.block_on(async {
     instrumented(0).await;
