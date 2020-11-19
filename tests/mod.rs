@@ -67,6 +67,33 @@ async fn trace_with_tokio_attribute() {
 }
 
 
+#[cfg(feature = "trace")]
+#[test_env_log::test]
+fn test_tracing_error() {
+  use tracing::{span, Level};
+  use tracing_error::SpanTrace;
+
+  let captured_inner_span;
+  let captured_outer_span;
+
+  {
+    let outer_span = span!(Level::ERROR, "outer");
+    let _guard = outer_span.enter();
+    {
+      let inner_span = span!(Level::ERROR, "inner");
+      let _guard = inner_span.enter();
+        captured_inner_span = SpanTrace::capture();
+    }
+    captured_outer_span = SpanTrace::capture();
+  }
+  assert!(format!("{}", captured_inner_span).contains("inner"));
+  assert!(format!("{}", captured_inner_span).contains("outer"));
+
+  assert!( ! format!("{}", captured_outer_span).contains("inner"));
+  assert!(format!("{}", captured_outer_span).contains("outer"));
+}
+
+
 mod local {
   use super::Error;
 

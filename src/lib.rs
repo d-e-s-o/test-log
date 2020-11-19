@@ -91,9 +91,11 @@ fn expand_tracing_init() -> Tokens {
   #[cfg(feature = "trace")]
   quote! {
     let _guard = {
+      use ::tracing_subscriber::layer::SubscriberExt;
       let subscriber = ::tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(::tracing_subscriber::EnvFilter::from_default_env())
-        .finish();
+        .finish()
+        .with(::tracing_error::ErrorLayer::default());
       ::tracing::subscriber::set_default(subscriber)
     };
   }
