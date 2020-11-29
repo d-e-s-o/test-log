@@ -23,7 +23,7 @@ use syn::ReturnType;
 /// A procedural macro for the `test` attribute.
 ///
 /// The attribute can be used to define a test that has the `env_logger`
-/// initialized.
+/// and/or `tracing` crates initialized (depending on the features used).
 ///
 /// # Example
 ///
@@ -90,12 +90,12 @@ fn expand_logging_init() -> Tokens {
 fn expand_tracing_init() -> Tokens {
   #[cfg(feature = "trace")]
   quote! {
-    let _guard = {
+    {
       let subscriber = ::tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(::tracing_subscriber::EnvFilter::from_default_env())
         .finish();
-      ::tracing::subscriber::set_default(subscriber)
-    };
+      let _ = ::tracing::subscriber::set_global_default(subscriber);
+    }
   }
   #[cfg(not(feature = "trace"))]
   quote! {}
