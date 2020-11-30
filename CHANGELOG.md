@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.3
+-----
 - Initialize `tracing` globally instead of individually for the run time
   of each test
 - Bumped minimum supported Rust version to `1.42`
