@@ -1,6 +1,7 @@
 Unreleased
 ----------
 - Eliminated need for emitting of `::f` test function
+- Excluded unnecessary files from being contained in release bundle
 
 
 0.2.3
