@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Eliminated need for emitting of `::f` test function
+
+
 0.2.3
 -----
 - Initialize `tracing` globally instead of individually for the run time
