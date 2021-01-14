@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.4
+-----
 - Eliminated need for emitting of `::f` test function
 - Excluded unnecessary files from being contained in release bundle
 
