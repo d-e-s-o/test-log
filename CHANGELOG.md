@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.5
+-----
 - Eliminated emitting of `-> ()` constructs in test function signatures
 
 
