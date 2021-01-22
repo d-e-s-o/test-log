@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Eliminated emitting of `-> ()` constructs in test function signatures
+
+
 0.2.4
 -----
 - Eliminated need for emitting of `::f` test function

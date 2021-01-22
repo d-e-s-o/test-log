@@ -112,13 +112,11 @@ fn expand_wrapper(inner_test: &Path, wrappee: &ItemFn) -> TokenStream {
   let body = &wrappee.block;
   let test_name = &wrappee.sig.ident;
 
-  // Rust does not allow us to have a test function with #[should_panic]
-  // that returns anything but (). Unfortunately, it does not check
-  // whether a type alias actually just "expands" to (), but errors out.
-  // So we need to special case that by referencing () directly.
-  let ret_type = match &wrappee.sig.output {
-    ReturnType::Default => quote! {()},
-    ReturnType::Type(_, type_) => quote! {#type_},
+  // Note that Rust does not allow us to have a test function with
+  // #[should_panic] that has a non-unit return value.
+  let ret = match &wrappee.sig.output {
+    ReturnType::Default => quote! {},
+    ReturnType::Type(_, type_) => quote! {-> #type_},
   };
 
   let logging_init = expand_logging_init();
@@ -127,8 +125,8 @@ fn expand_wrapper(inner_test: &Path, wrappee: &ItemFn) -> TokenStream {
   let result = quote! {
     #[#inner_test]
     #(#attrs)*
-    #async_ fn #test_name() -> #ret_type {
-      #async_ fn test_impl() -> #ret_type {
+    #async_ fn #test_name() #ret {
+      #async_ fn test_impl() #ret {
         #body
       }
 
