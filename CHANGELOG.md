@@ -1,5 +1,6 @@
 Unreleased
 ----------
+- Updated documentation to include wrapping of other attributes
 - Bumped minimum supported Rust version to `1.45`
 
 

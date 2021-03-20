@@ -66,6 +66,16 @@ fn it_still_works() {
 }
 ```
 
+You can also wrap another attribute. For example, suppose you use
+[`#[tokio::test]`][tokio-test] to run async tests:
+```rust
+use test_env_log::test;
+
+#[test(tokio::test)]
+async fn it_still_works() {
+  // ...
+}
+```
 
 #### Logging Configuration
 
@@ -108,4 +118,5 @@ tracing-subscriber = {version = "0.2", features = ["chrono", "env-filter", "fmt"
 [docs-rs]: https://docs.rs/crate/test-env-log
 [env-docs-rs]: https://docs.rs/env_logger/0.7.0/env_logger
 [log]: https://crates.io/crates/log
+[tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
 [tracing]: https://crates.io/crates/tracing
