@@ -56,6 +56,19 @@ use syn::ReturnType;
 /// }
 /// # }
 /// ```
+///
+/// You can also wrap another attribute. For example, suppose you use
+/// [`#[tokio::test]`](https://docs.rs/tokio/0.2.4/tokio/attr.test.html) to run async tests:
+/// ```
+/// # mod fordoctest {
+/// use test_env_log::test;
+///
+/// #[test(tokio::test)]
+/// async fn it_still_works() {
+///   // ...
+/// }
+/// # }
+/// ```
 #[proc_macro_attribute]
 pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
   let args = parse_macro_input!(attr as AttributeArgs);
