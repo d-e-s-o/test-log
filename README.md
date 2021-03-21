@@ -101,11 +101,14 @@ mean.
 
 #### Features
 
-The crate comes with two features:
+The crate comes with three features:
 - `log`, enabled by default, controls initialization for the `log`
   crate.
 - `trace`, disabled by default, controls initialization for the
   `tracing` crate.
+- `trace-pretty`, disabled by default, configures the tracing subscriber to log in an ["excessively pretty,
+   human-readable"][format-pretty-docs-rs] format. Requires you to depend on `tracing-subscriber` with the feature
+  `ansi`. Implies `trace`.
 
 Depending on what backend the crate-under-test (and its dependencies)
 use, the respective feature should be enabled to make messages that are
@@ -128,3 +131,4 @@ tracing-subscriber = {version = "0.2", features = ["chrono", "env-filter", "fmt"
 [tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
 [tracing]: https://crates.io/crates/tracing
 [tracing-events-docs-rs]: https://docs.rs/tracing-subscriber/0.2.17/tracing_subscriber/fmt/struct.SubscriberBuilder.html#method.with_span_events
+[format-pretty-docs-rs]: https://docs.rs/tracing-subscriber/0.2.17/tracing_subscriber/fmt/format/struct.Pretty.html

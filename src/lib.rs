@@ -100,6 +100,12 @@ fn expand_logging_init() -> Tokens {
 
 /// Expand the initialization code for the `tracing` crate.
 fn expand_tracing_init() -> Tokens {
+  #[cfg(feature = "trace-pretty")]
+  let event_format = quote! { ::tracing_subscriber::fmt::format().pretty() };
+
+  #[cfg(not(feature = "trace-pretty"))]
+  let event_format = quote! { ::tracing_subscriber::fmt::format() };
+
   #[cfg(feature = "trace")]
   quote! {
     {
@@ -136,6 +142,7 @@ fn expand_tracing_init() -> Tokens {
       let subscriber = ::tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(::tracing_subscriber::EnvFilter::from_default_env())
         .with_span_events(__internal_event_filter)
+        .event_format(#event_format)
         .finish();
       let _ = ::tracing::subscriber::set_global_default(subscriber);
     }
