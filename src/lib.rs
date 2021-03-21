@@ -103,8 +103,39 @@ fn expand_tracing_init() -> Tokens {
   #[cfg(feature = "trace")]
   quote! {
     {
+      let __internal_event_filter = {
+        use ::tracing_subscriber::fmt::format::FmtSpan;
+
+        let var = match ::std::env::var("RUST_LOG_SPAN_EVENTS") {
+            Ok(value) => value,
+            Err(::std::env::VarError::NotUnicode(_)) =>
+                panic!("test-env-log: If provided environment variable RUST_LOG_SPAN_EVENTS must be valid unicode"),
+            Err(::std::env::VarError::NotPresent) => "".to_string(),
+        };
+
+        var
+            .to_ascii_lowercase()
+            .split(",")
+            .map(|filter| match filter.trim() {
+                "new" => FmtSpan::NEW,
+                "enter" => FmtSpan::ENTER,
+                "exit" => FmtSpan::EXIT,
+                "close" => FmtSpan::CLOSE,
+                "active" => FmtSpan::ACTIVE,
+                "full" => FmtSpan::FULL,
+                value => panic!("test-env-log: Invalid RUST_LOG_SPAN_EVENTS. Must contain filters separated by `,`.\n\t\
+                    For example: `active` or `new,close`.\n\t\
+                    Supported filters: new, enter, exit, close, active, full\n\t\
+                    Got: {}", value),
+            })
+            .fold(FmtSpan::NONE, |acc, filter| {
+                filter | acc
+            })
+      };
+
       let subscriber = ::tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(::tracing_subscriber::EnvFilter::from_default_env())
+        .with_span_events(__internal_event_filter)
         .finish();
       let _ = ::tracing::subscriber::set_global_default(subscriber);
     }
