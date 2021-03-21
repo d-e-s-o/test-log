@@ -91,6 +91,15 @@ used to influence the log level to work with (among other things).
 Please refer to the [`env_logger` docs][env-docs-rs] for more
 information.
 
+If the `trace` feature is enabled, the `RUST_LOG_SPAN_EVENTS`
+environment variable can be used to configure the tracing subscriber to
+log synthesized events at points in the span lifecycle. Set the variable
+to a comma-separated list of events you want to see. For example,
+`RUST_LOG_SPAN_EVENTS=full` or `RUST_LOG_SPAN_EVENTS=new,close`.
+
+Valid events are `new`, `enter`, `exit`, `close`, `active`, and `full`.
+See the [`tracing_subscriber` docs][tracing-events-docs-rs] for details
+on what the events mean.
 
 #### Features
 
@@ -120,3 +129,4 @@ tracing-subscriber = {version = "0.2", features = ["chrono", "env-filter", "fmt"
 [log]: https://crates.io/crates/log
 [tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
 [tracing]: https://crates.io/crates/tracing
+[tracing-events-docs-rs]: https://docs.rs/tracing-subscriber/0.2.17/tracing_subscriber/fmt/struct.SubscriberBuilder.html#method.with_span_events

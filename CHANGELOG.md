@@ -1,5 +1,7 @@
 Unreleased
 ----------
+- Introduced support for `RUST_LOG_SPAN_EVENTS` environment variable
+  that can be used to configure emitting of synthetic trace events
 - Updated documentation to include wrapping of other attributes
 - Bumped minimum supported Rust version to `1.45`
 
