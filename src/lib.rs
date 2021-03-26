@@ -134,6 +134,7 @@ fn expand_tracing_init() -> Tokens {
       let subscriber = ::tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(::tracing_subscriber::EnvFilter::from_default_env())
         .with_span_events(__internal_event_filter)
+        .with_test_writer()
         .finish();
       let _ = ::tracing::subscriber::set_global_default(subscriber);
     }
