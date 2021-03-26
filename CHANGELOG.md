@@ -1,3 +1,8 @@
+Unreleased
+-----
+- Changed `tracing-subscriber` to capture output with libtest.
+- Bumped minimum `tracing-subscriber` version to 0.2.12.
+
 0.2.6
 -----
 - Introduced support for `RUST_LOG_SPAN_EVENTS` environment variable
