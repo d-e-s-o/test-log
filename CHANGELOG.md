@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Bumped minimum supported Rust version to `1.45`
+
+
 0.2.5
 -----
 - Eliminated emitting of `-> ()` constructs in test function signatures
