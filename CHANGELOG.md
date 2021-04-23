@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Bumped minimum `tracing-subscriber` version to 0.2.17
+
+
 0.2.6
 -----
 - Introduced support for `RUST_LOG_SPAN_EVENTS` environment variable
