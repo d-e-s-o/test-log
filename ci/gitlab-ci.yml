@@ -11,7 +11,7 @@ build-test-lint:
   script:
   - rustup component add clippy
   - rustc --version && cargo --version
-  - cargo build --lib --tests --verbose
-  - cargo build --lib --tests --verbose --release
-  - cargo test --verbose
+  - cargo build --all-features --lib --tests --verbose
+  - cargo build --all-features --lib --tests --verbose --release
+  - cargo test --all-features --verbose
   - cargo clippy --all-targets --all-features -- -D warnings
