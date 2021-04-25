@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.7
+-----
 - Changed `tracing` behavior to capture output and only emit it on test
   failure or when explicitly requested
 - Bumped minimum `tracing-subscriber` version to 0.2.17
