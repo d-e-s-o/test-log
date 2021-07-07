@@ -26,9 +26,6 @@ tracing infrastructure before running tests.
 """
 include = ["src/lib.rs", "LICENSE-*", "README.md", "CHANGELOG.md"]
 
-[badges]
-gitlab = { repository = "d-e-s-o/test-env-log", branch = "master" }
-
 [lib]
 proc-macro = true
 
