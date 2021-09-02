@@ -112,6 +112,7 @@ fn expand_tracing_init() -> Tokens {
               .to_ascii_lowercase()
               .split(",")
               .map(|filter| match filter.trim() {
+                "off" => FmtSpan::NONE,
                 "new" => FmtSpan::NEW,
                 "enter" => FmtSpan::ENTER,
                 "exit" => FmtSpan::EXIT,
@@ -120,7 +121,7 @@ fn expand_tracing_init() -> Tokens {
                 "full" => FmtSpan::FULL,
                 _ => panic!("test-env-log: RUST_LOG_SPAN_EVENTS must contain filters separated by `,`.\n\t\
                   For example: `active` or `new,close`\n\t\
-                  Supported filters: new, enter, exit, close, active, full\n\t\
+                  Supported filters: off, new, enter, exit, close, active, full\n\t\
                   Got: {}", value),
               })
               .fold(FmtSpan::NONE, |acc, filter| filter | acc)

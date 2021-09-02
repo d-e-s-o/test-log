@@ -97,7 +97,7 @@ log synthesized events at points in the span lifecycle. Set the variable
 to a comma-separated list of events you want to see. For example,
 `RUST_LOG_SPAN_EVENTS=full` or `RUST_LOG_SPAN_EVENTS=new,close`.
 
-Valid events are `new`, `enter`, `exit`, `close`, `active`, and `full`.
+Valid events are `off`, `new`, `enter`, `exit`, `close`, `active`, and `full`.
 See the [`tracing_subscriber` docs][tracing-events-docs-rs] for details
 on what the events mean.
 
