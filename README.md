@@ -121,7 +121,7 @@ enabling the `log` or `trace` feature, respectively). E.g.,
 [dev-dependencies]
 env_logger = "*"
 tracing = {version = "0.1", default-features = false}
-tracing-subscriber = {version = "0.2.17", default-features = false, features = ["env-filter", "fmt"]}
+tracing-subscriber = {version = "0.3", default-features = false, features = ["env-filter", "fmt"]}
 ```
 
 
@@ -130,4 +130,4 @@ tracing-subscriber = {version = "0.2.17", default-features = false, features = [
 [log]: https://crates.io/crates/log
 [tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
 [tracing]: https://crates.io/crates/tracing
-[tracing-events-docs-rs]: https://docs.rs/tracing-subscriber/0.2.17/tracing_subscriber/fmt/struct.SubscriberBuilder.html#method.with_span_events
+[tracing-events-docs-rs]: https://docs.rs/tracing-subscriber/0.3.1/tracing_subscriber/fmt/struct.SubscriberBuilder.html#method.with_span_events
