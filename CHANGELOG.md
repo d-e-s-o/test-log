@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.8
+-----
 - Renamed crate `test-log`
 
 
