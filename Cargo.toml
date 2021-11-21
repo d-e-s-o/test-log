@@ -1,11 +1,11 @@
 [package]
-name = "test-env-log"
+name = "test-log"
 version = "0.2.7"
 authors = ["Daniel Mueller <deso@posteo.net>"]
 edition = "2018"
 license = "Apache-2.0 OR MIT"
-homepage = "https://github.com/d-e-s-o/test-env-log"
-repository = "https://github.com/d-e-s-o/test-env-log.git"
+homepage = "https://github.com/d-e-s-o/test-log"
+repository = "https://github.com/d-e-s-o/test-log.git"
 readme = "README.md"
 categories = [
   "development-tools::testing",

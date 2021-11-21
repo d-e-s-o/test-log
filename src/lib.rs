@@ -35,7 +35,7 @@ use syn::ReturnType;
 /// # use logging::info;
 /// # // Note that no test would actually run, regardless of `no_run`,
 /// # // because we do not invoke the function.
-/// #[test_env_log::test]
+/// #[test_log::test]
 /// fn it_works() {
 ///   info!("Checking whether it still works...");
 ///   assert_eq!(2 + 2, 4);
@@ -48,7 +48,7 @@ use syn::ReturnType;
 /// the `#[test]` attribute on a per-module basis:
 /// ```rust,no_run
 /// # mod fordoctest {
-/// use test_env_log::test;
+/// use test_log::test;
 ///
 /// #[test]
 /// fn it_still_works() {
@@ -62,7 +62,7 @@ use syn::ReturnType;
 /// to run async tests:
 /// ```
 /// # mod fordoctest {
-/// use test_env_log::test;
+/// use test_log::test;
 ///
 /// #[test(tokio::test)]
 /// async fn it_still_works() {
@@ -118,7 +118,7 @@ fn expand_tracing_init() -> Tokens {
                 "close" => FmtSpan::CLOSE,
                 "active" => FmtSpan::ACTIVE,
                 "full" => FmtSpan::FULL,
-                _ => panic!("test-env-log: RUST_LOG_SPAN_EVENTS must contain filters separated by `,`.\n\t\
+                _ => panic!("test-log: RUST_LOG_SPAN_EVENTS must contain filters separated by `,`.\n\t\
                   For example: `active` or `new,close`\n\t\
                   Supported filters: new, enter, exit, close, active, full\n\t\
                   Got: {}", value),
@@ -126,7 +126,7 @@ fn expand_tracing_init() -> Tokens {
               .fold(FmtSpan::NONE, |acc, filter| filter | acc)
           },
           Err(::std::env::VarError::NotUnicode(_)) =>
-            panic!("test-env-log: RUST_LOG_SPAN_EVENTS must contain a valid UTF-8 string"),
+            panic!("test-log: RUST_LOG_SPAN_EVENTS must contain a valid UTF-8 string"),
           Err(::std::env::VarError::NotPresent) => FmtSpan::NONE,
         }
       };

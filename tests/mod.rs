@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2020 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2019-2021 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 use tokio::runtime::Builder;
@@ -16,23 +16,23 @@ mod something {
 use something::Error;
 
 
-#[test_env_log::test]
+#[test_log::test]
 fn without_return_type() {
   assert_eq!(2 + 2, 4);
 }
 
-#[test_env_log::test]
+#[test_log::test]
 fn with_return_type() -> Result<(), Error> {
   Ok(())
 }
 
-#[test_env_log::test]
+#[test_log::test]
 #[should_panic(expected = "success")]
 fn with_panic() {
   panic!("success")
 }
 
-#[test_env_log::test(tokio::test)]
+#[test_log::test(tokio::test)]
 async fn with_inner_test_attribute_and_async() {
   assert_eq!(async { 42 }.await, 42)
 }
@@ -48,7 +48,7 @@ async fn instrumented(input: usize) -> usize {
   result
 }
 
-#[test_env_log::test]
+#[test_log::test]
 fn trace_with_custom_runtime() {
   let rt = Builder::new_current_thread().build().unwrap();
 
@@ -59,7 +59,7 @@ fn trace_with_custom_runtime() {
   })
 }
 
-#[test_env_log::test(tokio::test)]
+#[test_log::test(tokio::test)]
 async fn trace_with_tokio_attribute() {
   instrumented(6).await;
   instrumented(4).await;
@@ -70,7 +70,7 @@ async fn trace_with_tokio_attribute() {
 mod local {
   use super::Error;
 
-  use test_env_log::test;
+  use test_log::test;
 
   #[test]
   fn without_return_type() {
