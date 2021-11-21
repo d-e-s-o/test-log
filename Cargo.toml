@@ -40,7 +40,7 @@ quote = {version = "1.0"}
 syn = {version = "1.0", features = ["full"]}
 
 [dev-dependencies]
-env_logger = {version = "0.8", default-features = false}
+env_logger = {version = "0.9", default-features = false}
 logging = {version = "0.4", package = "log"}
 tokio = {version = "1.0", default-features = false, features = ["rt", "macros"]}
 tracing = {version = "0.1"}

@@ -126,7 +126,7 @@ tracing-subscriber = {version = "0.3", default-features = false, features = ["en
 
 
 [docs-rs]: https://docs.rs/crate/test-log
-[env-docs-rs]: https://docs.rs/env_logger/0.7.0/env_logger
+[env-docs-rs]: https://docs.rs/env_logger/0.9.0/env_logger
 [log]: https://crates.io/crates/log
 [tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
 [tracing]: https://crates.io/crates/tracing
