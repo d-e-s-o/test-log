@@ -14,4 +14,5 @@ build-test-lint:
   - cargo build --all-features --lib --tests --verbose
   - cargo build --all-features --lib --tests --verbose --release
   - cargo test --all-features --verbose
-  - cargo clippy --all-targets --all-features -- -D warnings
+  - cargo clippy --all-targets --all-features -- -A unknown_lints -D warnings
+  - cargo doc --no-deps

@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Added CI checks for auto generated code documentation
+
+
 0.2.8
 -----
 - Renamed crate `test-log`
