@@ -1,6 +1,7 @@
 Unreleased
 ----------
 - Added CI checks for auto generated code documentation
+- Bumped minimum supported Rust version to `1.49`
 
 
 0.2.8
