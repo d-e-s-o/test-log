@@ -1,5 +1,6 @@
 Unreleased
 ----------
+- Added support for inner `#[test]` attribute arguments
 - Added CI checks for auto generated code documentation
 - Bumped minimum supported Rust version to `1.49`
 

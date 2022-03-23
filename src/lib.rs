@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2021 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2019-2022 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 #![deny(broken_intra_doc_links, missing_docs)]
@@ -14,13 +14,12 @@ use proc_macro2::TokenStream as Tokens;
 
 use quote::quote;
 
+use syn::parse_macro_input;
+use syn::parse_quote;
 use syn::AttributeArgs;
 use syn::ItemFn;
 use syn::Meta;
 use syn::NestedMeta;
-use syn::parse_macro_input;
-use syn::parse_quote;
-use syn::Path;
 use syn::ReturnType;
 
 
@@ -83,8 +82,9 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
 
   let inner_test = match args.as_slice() {
     [] => parse_quote! { ::core::prelude::v1::test },
-    [NestedMeta::Meta(Meta::Path(path))] => path.clone(),
-    _ => panic!("unsupported attributes supplied: {}", quote! { args }),
+    [NestedMeta::Meta(Meta::Path(path))] => quote! { #path },
+    [NestedMeta::Meta(Meta::List(list))] => quote! { #list },
+    _ => panic!("unsupported attributes supplied: {:?}", args),
   };
 
   expand_wrapper(&inner_test, &input)
@@ -151,7 +151,7 @@ fn expand_tracing_init() -> Tokens {
 
 
 /// Emit code for a wrapper function around a test function.
-fn expand_wrapper(inner_test: &Path, wrappee: &ItemFn) -> TokenStream {
+fn expand_wrapper(inner_test: &Tokens, wrappee: &ItemFn) -> TokenStream {
   let attrs = &wrappee.attrs;
   let async_ = &wrappee.sig.asyncness;
   let await_ = if async_.is_some() {

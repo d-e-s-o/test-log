@@ -42,7 +42,7 @@ syn = {version = "1.0", features = ["full"]}
 [dev-dependencies]
 env_logger = {version = "0.9", default-features = false}
 logging = {version = "0.4", package = "log"}
-tokio = {version = "1.0", default-features = false, features = ["rt", "macros"]}
+tokio = {version = "1.0", default-features = false, features = ["rt-multi-thread", "macros"]}
 tracing = {version = "0.1"}
 tracing-futures = {version = "0.2", default-features = false, features = ["std-future"]}
 tracing-subscriber = {version = "0.3", default-features = false, features = ["env-filter", "fmt"]}

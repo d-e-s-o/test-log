@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2021 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2019-2022 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 #![allow(clippy::eq_op)]
@@ -63,6 +63,13 @@ fn trace_with_custom_runtime() {
 
 #[test_log::test(tokio::test)]
 async fn trace_with_tokio_attribute() {
+  instrumented(6).await;
+  instrumented(4).await;
+  debug!("done");
+}
+
+#[test_log::test(tokio::test(flavor = "multi_thread", worker_threads = 1))]
+async fn trace_with_tokio_attribute_with_arguments() {
   instrumented(6).await;
   instrumented(4).await;
   debug!("done");
