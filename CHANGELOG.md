@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Fixed potential build failure when used from edition 2021 crates
+
+
 0.2.9
 -----
 - Added support for inner `#[test]` attribute arguments
