@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.10
+------
 - Fixed potential build failure when used from edition 2021 crates
 
 
