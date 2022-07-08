@@ -1,4 +1,4 @@
-[![pipeline](https://gitlab.com/d-e-s-o/test-log/badges/master/pipeline.svg)](https://gitlab.com/d-e-s-o/test-log/commits/master)
+[![pipeline](https://gitlab.com/d-e-s-o/test-log/badges/main/pipeline.svg)](https://gitlab.com/d-e-s-o/test-log/commits/main)
 [![crates.io](https://img.shields.io/crates/v/test-log.svg)](https://crates.io/crates/test-log)
 [![Docs](https://docs.rs/test-log/badge.svg)](https://docs.rs/test-log)
 [![rustc](https://img.shields.io/badge/rustc-1.45+-blue.svg)](https://blog.rust-lang.org/2020/07/16/Rust-1.45.0.html)
