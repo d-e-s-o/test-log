@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Switched to using GitHub Actions as CI provider
+
+
 0.2.10
 ------
 - Fixed potential build failure when used from edition 2021 crates
