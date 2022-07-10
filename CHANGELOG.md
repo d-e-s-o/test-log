@@ -1,5 +1,6 @@
 Unreleased
 ----------
+- Fixed potential build failure due to unhygienic procedural macros
 - Switched to using GitHub Actions as CI provider
 
 

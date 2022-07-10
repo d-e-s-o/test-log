@@ -180,9 +180,24 @@ fn expand_wrapper(inner_test: &Tokens, wrappee: &ItemFn) -> TokenStream {
         #body
       }
 
-      #logging_init
-      #tracing_init
+      // We put all initialization code into a separate module here in
+      // order to prevent potential ambiguities that could result in
+      // compilation errors. E.g., client code could use traits that
+      // could have methods that interfere with ones we use as part of
+      // initialization; with a `Foo` trait that is implemented for T
+      // and that contains a `map` (or similarly common named) method
+      // that could cause an ambiguity with `Iterator::map`, for
+      // example.
+      // The alternative would be to use fully qualified call syntax in
+      // all initialization code, but that's much harder to control.
+      mod init {
+        pub fn init() {
+          #logging_init
+          #tracing_init
+        }
+      }
 
+      init::init();
       test_impl()#await_
     }
   };
