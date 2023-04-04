@@ -93,10 +93,16 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
 
 /// Expand the initialization code for the `log` crate.
 fn expand_logging_init() -> Tokens {
-  #[cfg(feature = "log")]
+  #[cfg(all(feature = "log", not(feature = "use-stdout")))]
   quote! {
     {
       let _ = ::env_logger::builder().is_test(true).try_init();
+    }
+  }
+  #[cfg(all(feature = "log", feature = "use-stdout"))]
+  quote! {
+    {
+      let _ = ::env_logger::builder().is_test(true).target(::env_logger::Target::Stdout).try_init();
     }
   }
   #[cfg(not(feature = "log"))]

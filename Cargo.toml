@@ -34,6 +34,9 @@ default = ["log"]
 trace = []
 log = []
 
+# Enable to pipe log output to stdout instead of stderr
+use-stdout = []
+
 [dependencies]
 proc-macro2 = "1.0"
 quote = {version = "1.0"}
