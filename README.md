@@ -1,4 +1,4 @@
-[![pipeline](https://github.com/d-e-s-o/test-log/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/d-e-s-o/test-log/actions/workflows/ci.yml)
+[![pipeline](https://github.com/d-e-s-o/test-log/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/d-e-s-o/test-log/actions/workflows/test.yml)
 [![crates.io](https://img.shields.io/crates/v/test-log.svg)](https://crates.io/crates/test-log)
 [![Docs](https://docs.rs/test-log/badge.svg)](https://docs.rs/test-log)
 [![rustc](https://img.shields.io/badge/rustc-1.49+-blue.svg)](https://blog.rust-lang.org/2020/12/31/Rust-1.49.0.html)
