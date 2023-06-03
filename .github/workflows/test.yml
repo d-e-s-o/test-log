@@ -58,7 +58,7 @@ jobs:
     name: Generate documentation
     runs-on: ubuntu-latest
     env:
-      RUSTDOCFLAGS: '-D warnings'
+      RUSTDOCFLAGS: '-D warnings -D rustdoc::broken_intra_doc_links'
     steps:
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1

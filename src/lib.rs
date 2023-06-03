@@ -1,7 +1,7 @@
-// Copyright (C) 2019-2022 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2019-2023 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-#![deny(broken_intra_doc_links, missing_docs)]
+#![deny(missing_docs)]
 
 //! A crate providing a replacement #[[macro@test]] attribute that
 //! initializes logging and/or tracing infrastructure before running
