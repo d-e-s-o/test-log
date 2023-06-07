@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2022 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2019-2023 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 #![allow(clippy::eq_op)]
@@ -37,6 +37,18 @@ fn with_panic() {
 #[test_log::test(tokio::test)]
 async fn with_inner_test_attribute_and_async() {
   assert_eq!(async { 42 }.await, 42)
+}
+
+#[test_log::test(test_case::test_case(-2, -4))]
+fn with_inner_test_attribute_and_test_args(x: i8, y: i8) {
+  assert_eq!(x, -2);
+  assert_eq!(y, -4);
+}
+
+#[should_panic]
+#[test_log::test(test_case::test_case(-2, -4))]
+fn with_inner_test_attribute_and_test_args_and_panic(x: i8, _y: i8) {
+  assert_eq!(x, 0);
 }
 
 #[instrument]
@@ -118,5 +130,17 @@ mod local {
   #[test(tokio::test)]
   async fn with_inner_test_attribute_and_async() {
     assert_eq!(async { 42 }.await, 42)
+  }
+
+  #[test(test_case::test_case(-2, -4))]
+  fn with_inner_test_attribute_and_test_args(x: i8, y: i8) {
+    assert_eq!(x, -2);
+    assert_eq!(y, -4);
+  }
+
+  #[should_panic]
+  #[test(test_case::test_case(-2, -4))]
+  fn with_inner_test_attribute_and_test_args_and_panic(x: i8, _y: i8) {
+    assert_eq!(x, 0);
   }
 }
