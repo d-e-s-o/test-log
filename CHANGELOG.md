@@ -2,6 +2,7 @@ Unreleased
 ----------
 - Fixed handling of inner `#[test]` attributes that add arguments to
   test function
+- Added GitHub Actions workflow for publishing the crate
 
 
 0.2.11
