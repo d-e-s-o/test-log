@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.12
+------
 - Fixed handling of inner `#[test]` attributes that add arguments to
   test function
 - Added GitHub Actions workflow for publishing the crate
