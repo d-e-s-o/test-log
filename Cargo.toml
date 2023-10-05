@@ -51,4 +51,4 @@ tracing-subscriber = {version = "0.3", default-features = false, features = ["en
 # A set of unused dependencies that we require to force correct minimum
 # versions of transitive dependencies, for cases where our dependencies
 # have incorrect dependency specifications themselves.
-_lazy_static_unused = { package = "lazy_static", version = "1.0.2" }
+_lazy_static_unused = {package = "lazy_static", version = "1.0.2"}

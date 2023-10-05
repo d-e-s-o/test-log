@@ -1,0 +1,6 @@
+[[rule]]
+
+[rule.formatting]
+array_auto_expand = false
+array_auto_collapse = false
+compact_inline_tables = true
