@@ -15,11 +15,7 @@ use proc_macro2::TokenStream as Tokens;
 use quote::quote;
 
 use syn::parse_macro_input;
-use syn::parse_quote;
-use syn::AttributeArgs;
 use syn::ItemFn;
-use syn::Meta;
-use syn::NestedMeta;
 
 
 /// A procedural macro for the `test` attribute.
@@ -76,15 +72,12 @@ use syn::NestedMeta;
 /// ```
 #[proc_macro_attribute]
 pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
-  let args = parse_macro_input!(attr as AttributeArgs);
-  let input = parse_macro_input!(item as ItemFn);
-
-  let inner_test = match args.as_slice() {
-    [] => parse_quote! { ::core::prelude::v1::test },
-    [NestedMeta::Meta(Meta::Path(path))] => quote! { #path },
-    [NestedMeta::Meta(Meta::List(list))] => quote! { #list },
-    _ => panic!("unsupported attributes supplied: {:?}", args),
+  let inner_test = if attr.is_empty() {
+    quote! { ::core::prelude::v1::test }
+  } else {
+    attr.into()
   };
+  let input = parse_macro_input!(item as ItemFn);
 
   let ItemFn {
     attrs,
