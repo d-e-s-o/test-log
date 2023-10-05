@@ -25,7 +25,6 @@ use syn::NestedMeta;
 use syn::ReturnType;
 use syn::Token;
 
-
 /// A procedural macro for the `test` attribute.
 ///
 /// The attribute can be used to define a test that has the `env_logger`
@@ -93,7 +92,6 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
   expand_wrapper(&inner_test, &input)
 }
 
-
 /// Expand the initialization code for the `log` crate.
 fn expand_logging_init() -> Tokens {
   #[cfg(feature = "log")]
@@ -105,7 +103,6 @@ fn expand_logging_init() -> Tokens {
   #[cfg(not(feature = "log"))]
   quote! {}
 }
-
 
 /// Expand the initialization code for the `tracing` crate.
 fn expand_tracing_init() -> Tokens {
@@ -152,7 +149,6 @@ fn expand_tracing_init() -> Tokens {
   quote! {}
 }
 
-
 /// Extract the argument names from the inputs of a function signature.
 fn extract_args(inputs: &Punctuated<FnArg, Token![,]>) -> Punctuated<Tokens, Token![,]> {
   inputs
@@ -169,7 +165,6 @@ fn extract_args(inputs: &Punctuated<FnArg, Token![,]>) -> Punctuated<Tokens, Tok
     })
     .collect()
 }
-
 
 /// Emit code for a wrapper function around a test function.
 fn expand_wrapper(inner_test: &Tokens, wrappee: &ItemFn) -> TokenStream {

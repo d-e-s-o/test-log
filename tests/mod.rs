@@ -10,13 +10,11 @@ use tracing::error;
 use tracing::info;
 use tracing::instrument;
 
-
 mod something {
   pub type Error = String;
 }
 
 use something::Error;
-
 
 #[test_log::test]
 fn without_return_type() {
@@ -102,7 +100,6 @@ impl<T> Foo for T {}
 /// initialization code.
 #[test_log::test]
 fn unambiguous_map() {}
-
 
 /// A module used for testing the `test` attribute after importing it
 /// via `use` instead of using fuller qualified syntax.
