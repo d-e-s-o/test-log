@@ -4,6 +4,7 @@ Unreleased
   `test_case` crate), that may not have been parsable in the past
 - Removed generated `test_impl` function, which could have "leaked" into
   test cases (#28)
+- Eliminated dependency on `tracing` crate
 
 
 0.2.12
