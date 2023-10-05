@@ -1,3 +1,9 @@
+Unreleased
+----------
+- Removed generated `test_impl` function, which could have "leaked" into
+  test cases (#28)
+
+
 0.2.12
 ------
 - Fixed handling of inner `#[test]` attributes that add arguments to
