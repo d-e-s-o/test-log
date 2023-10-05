@@ -85,7 +85,43 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
     _ => panic!("unsupported attributes supplied: {:?}", args),
   };
 
-  expand_wrapper(&inner_test, &input)
+  let ItemFn {
+    attrs,
+    vis,
+    sig,
+    block,
+  } = input;
+
+  let logging_init = expand_logging_init();
+  let tracing_init = expand_tracing_init();
+
+  let result = quote! {
+    #[#inner_test]
+    #(#attrs)*
+    #vis #sig {
+      // We put all initialization code into a separate module here in
+      // order to prevent potential ambiguities that could result in
+      // compilation errors. E.g., client code could use traits that
+      // could have methods that interfere with ones we use as part of
+      // initialization; with a `Foo` trait that is implemented for T
+      // and that contains a `map` (or similarly common named) method
+      // that could cause an ambiguity with `Iterator::map`, for
+      // example.
+      // The alternative would be to use fully qualified call syntax in
+      // all initialization code, but that's much harder to control.
+      mod init {
+        pub fn init() {
+          #logging_init
+          #tracing_init
+        }
+      }
+
+      init::init();
+
+      #block
+    }
+  };
+  result.into()
 }
 
 /// Expand the initialization code for the `log` crate.
@@ -143,45 +179,4 @@ fn expand_tracing_init() -> Tokens {
   }
   #[cfg(not(feature = "trace"))]
   quote! {}
-}
-
-/// Emit code for a wrapper function around a test function.
-fn expand_wrapper(inner_test: &Tokens, wrappee: &ItemFn) -> TokenStream {
-  let ItemFn {
-    attrs,
-    vis,
-    sig,
-    block,
-  } = wrappee;
-
-  let logging_init = expand_logging_init();
-  let tracing_init = expand_tracing_init();
-
-  let result = quote! {
-    #[#inner_test]
-    #(#attrs)*
-    #vis #sig {
-      // We put all initialization code into a separate module here in
-      // order to prevent potential ambiguities that could result in
-      // compilation errors. E.g., client code could use traits that
-      // could have methods that interfere with ones we use as part of
-      // initialization; with a `Foo` trait that is implemented for T
-      // and that contains a `map` (or similarly common named) method
-      // that could cause an ambiguity with `Iterator::map`, for
-      // example.
-      // The alternative would be to use fully qualified call syntax in
-      // all initialization code, but that's much harder to control.
-      mod init {
-        pub fn init() {
-          #logging_init
-          #tracing_init
-        }
-      }
-
-      init::init();
-
-      #block
-    }
-  };
-  result.into()
 }
