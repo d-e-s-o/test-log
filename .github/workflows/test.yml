@@ -65,6 +65,17 @@ jobs:
           default: true
       - name: Build
         run: cargo build --locked --all-features
+  rustfmt:
+    name: Check code formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+          override: true
+      - run: cargo +nightly fmt -- --check
   clippy:
     name: Lint with clippy
     runs-on: ubuntu-latest
