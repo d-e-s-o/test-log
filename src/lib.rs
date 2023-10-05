@@ -16,14 +16,10 @@ use quote::quote;
 
 use syn::parse_macro_input;
 use syn::parse_quote;
-use syn::punctuated::Punctuated;
 use syn::AttributeArgs;
-use syn::FnArg;
 use syn::ItemFn;
 use syn::Meta;
 use syn::NestedMeta;
-use syn::ReturnType;
-use syn::Token;
 
 /// A procedural macro for the `test` attribute.
 ///
@@ -149,43 +145,14 @@ fn expand_tracing_init() -> Tokens {
   quote! {}
 }
 
-/// Extract the argument names from the inputs of a function signature.
-fn extract_args(inputs: &Punctuated<FnArg, Token![,]>) -> Punctuated<Tokens, Token![,]> {
-  inputs
-    .iter()
-    .map(|arg| match arg {
-      FnArg::Receiver(receiver) => {
-        let slf = receiver.self_token;
-        quote! { #slf }
-      },
-      FnArg::Typed(typed) => {
-        let pat = &typed.pat;
-        quote! { #pat }
-      },
-    })
-    .collect()
-}
-
 /// Emit code for a wrapper function around a test function.
 fn expand_wrapper(inner_test: &Tokens, wrappee: &ItemFn) -> TokenStream {
-  let attrs = &wrappee.attrs;
-  let async_ = &wrappee.sig.asyncness;
-  let await_ = if async_.is_some() {
-    quote! {.await}
-  } else {
-    quote! {}
-  };
-  let body = &wrappee.block;
-  let test_name = &wrappee.sig.ident;
-  let inputs = &wrappee.sig.inputs;
-  let args = extract_args(inputs);
-
-  // Note that Rust does not allow us to have a test function with
-  // #[should_panic] that has a non-unit return value.
-  let ret = match &wrappee.sig.output {
-    ReturnType::Default => quote! {},
-    ReturnType::Type(_, type_) => quote! {-> #type_},
-  };
+  let ItemFn {
+    attrs,
+    vis,
+    sig,
+    block,
+  } = wrappee;
 
   let logging_init = expand_logging_init();
   let tracing_init = expand_tracing_init();
@@ -193,11 +160,7 @@ fn expand_wrapper(inner_test: &Tokens, wrappee: &ItemFn) -> TokenStream {
   let result = quote! {
     #[#inner_test]
     #(#attrs)*
-    #async_ fn #test_name(#inputs) #ret {
-      #async_ fn test_impl(#inputs) #ret {
-        #body
-      }
-
+    #vis #sig {
       // We put all initialization code into a separate module here in
       // order to prevent potential ambiguities that could result in
       // compilation errors. E.g., client code could use traits that
@@ -216,7 +179,8 @@ fn expand_wrapper(inner_test: &Tokens, wrappee: &ItemFn) -> TokenStream {
       }
 
       init::init();
-      test_impl(#args)#await_
+
+      #block
     }
   };
   result.into()
