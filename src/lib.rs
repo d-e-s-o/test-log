@@ -137,10 +137,11 @@ fn expand_tracing_init() -> Tokens {
       let __internal_event_filter = {
         use ::tracing_subscriber::fmt::format::FmtSpan;
 
-        match ::std::env::var("RUST_LOG_SPAN_EVENTS") {
-          Ok(value) => {
+        match ::std::env::var_os("RUST_LOG_SPAN_EVENTS") {
+          Some(mut value) => {
+            value.make_ascii_lowercase();
+            let value = value.to_str().expect("test-log: RUST_LOG_SPAN_EVENTS must be valid UTF-8");
             value
-              .to_ascii_lowercase()
               .split(",")
               .map(|filter| match filter.trim() {
                 "new" => FmtSpan::NEW,
@@ -156,9 +157,7 @@ fn expand_tracing_init() -> Tokens {
               })
               .fold(FmtSpan::NONE, |acc, filter| filter | acc)
           },
-          Err(::std::env::VarError::NotUnicode(_)) =>
-            panic!("test-log: RUST_LOG_SPAN_EVENTS must contain a valid UTF-8 string"),
-          Err(::std::env::VarError::NotPresent) => FmtSpan::NONE,
+          None => FmtSpan::NONE,
         }
       };
 
