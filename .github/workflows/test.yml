@@ -61,7 +61,7 @@ jobs:
           profile: minimal
           # Please adjust README and rust-version field in Cargo.toml files when
           # bumping version.
-          toolchain: 1.49.0
+          toolchain: 1.56
           default: true
       - name: Build
         run: cargo build --locked --all-features
