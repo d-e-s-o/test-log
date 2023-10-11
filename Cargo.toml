@@ -3,6 +3,7 @@ name = "test-log"
 version = "0.2.12"
 authors = ["Daniel Mueller <deso@posteo.net>"]
 edition = "2018"
+rust-version = "1.56"
 license = "Apache-2.0 OR MIT"
 homepage = "https://github.com/d-e-s-o/test-log"
 repository = "https://github.com/d-e-s-o/test-log.git"
@@ -37,7 +38,7 @@ log = []
 [dependencies]
 proc-macro2 = {version = "1.0.32", default-features = false}
 quote = {version = "1.0", default-features = false}
-syn = {version = "1.0.91", default-features = false, features = ["full", "parsing", "printing", "proc-macro"]}
+syn = {version = "2.0", default-features = false, features = ["full", "parsing", "printing", "proc-macro"]}
 
 [dev-dependencies]
 env_logger = {version = "0.9", default-features = false}

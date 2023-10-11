@@ -5,6 +5,8 @@ Unreleased
 - Removed generated `test_impl` function, which could have "leaked" into
   test cases (#28)
 - Eliminated dependency on `tracing` crate
+- Bumped minimum supported Rust version to `1.56` and bumped syn dependency to
+  2.0
 
 
 0.2.12
