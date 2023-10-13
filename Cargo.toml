@@ -1,6 +1,6 @@
 [package]
 name = "test-log"
-version = "0.2.12"
+version = "0.2.13"
 authors = ["Daniel Mueller <deso@posteo.net>"]
 edition = "2018"
 rust-version = "1.56"

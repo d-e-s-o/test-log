@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.13
+------
 - Improved interaction with nested attributes (such as those used by the
   `test_case` crate), that may not have been parsable in the past
 - Removed generated `test_impl` function, which could have "leaked" into
