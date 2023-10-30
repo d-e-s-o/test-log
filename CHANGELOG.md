@@ -1,5 +1,7 @@
 Unreleased
 ----------
+- Introduced `default_log_filter` attribute for setting the default log
+  filter on a per-test basis
 - Improved compile error output on wrong usage
 
 

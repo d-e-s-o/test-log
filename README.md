@@ -120,7 +120,7 @@ enabling the `log` or `trace` feature, respectively). E.g.,
 ```toml
 [dev-dependencies]
 env_logger = "*"
-tracing-subscriber = {version = "0.3", default-features = false, features = ["env-filter", "fmt"]}
+tracing-subscriber = {version = "0.3.10", default-features = false, features = ["env-filter", "fmt", "std"]}
 ```
 
 

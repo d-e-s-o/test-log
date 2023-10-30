@@ -14,8 +14,13 @@ use proc_macro2::TokenStream as Tokens;
 
 use quote::quote;
 
+use syn::parse::Parse;
 use syn::parse_macro_input;
+use syn::Attribute;
+use syn::Expr;
 use syn::ItemFn;
+use syn::Lit;
+use syn::Meta;
 
 
 /// A procedural macro for the `test` attribute.
@@ -78,6 +83,19 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
     .into()
 }
 
+fn parse_attrs(attrs: Vec<Attribute>) -> syn::Result<(AttributeArgs, Vec<Attribute>)> {
+  let mut attribute_args = AttributeArgs::default();
+  let mut ignored_attrs = vec![];
+  for attr in attrs {
+    let matched = attribute_args.try_parse_attr_single(&attr)?;
+    // Keep only attrs that didn't match the #[test_log(_)] syntax.
+    if !matched {
+      ignored_attrs.push(attr);
+    }
+  }
+
+  Ok((attribute_args, ignored_attrs))
+}
 
 fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
   let inner_test = if attr.is_empty() {
@@ -93,12 +111,13 @@ fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
     block,
   } = input;
 
-  let logging_init = expand_logging_init();
-  let tracing_init = expand_tracing_init();
+  let (attribute_args, ignored_attrs) = parse_attrs(attrs)?;
+  let logging_init = expand_logging_init(&attribute_args);
+  let tracing_init = expand_tracing_init(&attribute_args);
 
   let result = quote! {
     #[#inner_test]
-    #(#attrs)*
+    #(#ignored_attrs)*
     #vis #sig {
       // We put all initialization code into a separate module here in
       // order to prevent potential ambiguities that could result in
@@ -126,22 +145,110 @@ fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
 }
 
 
+#[derive(Debug, Default)]
+struct AttributeArgs {
+  default_log_filter: Option<String>,
+}
+
+impl AttributeArgs {
+  fn try_parse_attr_single(&mut self, attr: &Attribute) -> syn::Result<bool> {
+    if !attr.path().is_ident("test_log") {
+      return Ok(false)
+    }
+
+    let nested_meta = attr.parse_args_with(Meta::parse)?;
+    let name_value = if let Meta::NameValue(name_value) = nested_meta {
+      name_value
+    } else {
+      return Err(syn::Error::new_spanned(
+        &nested_meta,
+        "Expected NameValue syntax, e.g. 'default_log_filter = \"debug\"'.",
+      ))
+    };
+
+    let ident = if let Some(ident) = name_value.path.get_ident() {
+      ident
+    } else {
+      return Err(syn::Error::new_spanned(
+        &name_value.path,
+        "Expected NameValue syntax, e.g. 'default_log_filter = \"debug\"'.",
+      ))
+    };
+
+    let arg_ref = if ident == "default_log_filter" {
+      &mut self.default_log_filter
+    } else {
+      return Err(syn::Error::new_spanned(
+        &name_value.path,
+        "Unrecognized attribute, see documentation for details.",
+      ))
+    };
+
+    if let Expr::Lit(lit) = &name_value.value {
+      if let Lit::Str(lit_str) = &lit.lit {
+        *arg_ref = Some(lit_str.value());
+      }
+    }
+
+    // If we couldn't parse the value on the right-hand side because it was some
+    // unexpected type, e.g. #[test_log::log(default_log_filter=10)], return an error.
+    if arg_ref.is_none() {
+      return Err(syn::Error::new_spanned(
+        &name_value.value,
+        "Failed to parse value, expected a string",
+      ))
+    }
+
+    Ok(true)
+  }
+}
+
+
 /// Expand the initialization code for the `log` crate.
-fn expand_logging_init() -> Tokens {
-  #[cfg(feature = "log")]
+#[cfg(feature = "log")]
+fn expand_logging_init(attribute_args: &AttributeArgs) -> Tokens {
+  let add_default_log_filter = if let Some(default_log_filter) = &attribute_args.default_log_filter
+  {
+    quote! {
+      let env_logger_builder = env_logger_builder
+        .parse_env(::env_logger::Env::default().default_filter_or(#default_log_filter));
+    }
+  } else {
+    quote! {}
+  };
+
   quote! {
     {
-      let _ = ::env_logger::builder().is_test(true).try_init();
+      let mut env_logger_builder = ::env_logger::builder();
+      #add_default_log_filter
+      let _ = env_logger_builder.is_test(true).try_init();
     }
   }
-  #[cfg(not(feature = "log"))]
+}
+
+#[cfg(not(feature = "log"))]
+fn expand_logging_init(_attribute_args: &AttributeArgs) -> Tokens {
   quote! {}
 }
 
 
 /// Expand the initialization code for the `tracing` crate.
-fn expand_tracing_init() -> Tokens {
-  #[cfg(feature = "trace")]
+#[cfg(feature = "trace")]
+fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
+  let env_filter = if let Some(default_log_filter) = &attribute_args.default_log_filter {
+    quote! {
+      ::tracing_subscriber::EnvFilter::builder()
+        .with_default_directive(
+          #default_log_filter
+            .parse()
+            .expect("test-log: default_log_filter must be valid")
+        )
+        .from_env_lossy()
+    }
+  } else {
+    quote! { ::tracing_subscriber::EnvFilter::from_default_env() }
+  };
+
   quote! {
     {
       let __internal_event_filter = {
@@ -172,12 +279,15 @@ fn expand_tracing_init() -> Tokens {
       };
 
       let _ = ::tracing_subscriber::FmtSubscriber::builder()
-        .with_env_filter(::tracing_subscriber::EnvFilter::from_default_env())
+        .with_env_filter(#env_filter)
         .with_span_events(__internal_event_filter)
         .with_test_writer()
         .try_init();
     }
   }
-  #[cfg(not(feature = "trace"))]
+}
+
+#[cfg(not(feature = "trace"))]
+fn expand_tracing_init(_attribute_args: &AttributeArgs) -> Tokens {
   quote! {}
 }

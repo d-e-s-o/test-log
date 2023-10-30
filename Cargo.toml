@@ -30,6 +30,10 @@ include = ["src/lib.rs", "LICENSE-*", "README.md", "CHANGELOG.md"]
 [lib]
 proc-macro = true
 
+[[test]]
+name = "default_log_filter"
+required-features = ["log"]
+
 [features]
 default = ["log"]
 trace = []
@@ -47,4 +51,4 @@ test-case = {version = "3.1"}
 tokio = {version = "1.0", default-features = false, features = ["rt-multi-thread", "macros"]}
 tracing = {version = "0.1.20"}
 tracing-futures = {version = "0.2", default-features = false, features = ["std-future"]}
-tracing-subscriber = {version = "0.3", default-features = false, features = ["env-filter", "fmt"]}
+tracing-subscriber = {version = "0.3.10", default-features = false, features = ["env-filter", "fmt", "std"]}

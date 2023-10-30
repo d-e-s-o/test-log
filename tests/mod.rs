@@ -68,6 +68,19 @@ async fn instrumented(input: usize) -> usize {
   result
 }
 
+/// To run the tracing tests and manually verify the output, run with
+/// the `trace` feature:
+/// ```sh
+/// cargo test --features trace trace_with_custom_runtime -- --nocapture
+/// ```
+///
+/// Log level can be configured via the `RUST_LOG` env variable and span
+/// events for `#[instrumented]` can be configured via the
+/// `RUST_LOG_SPAN_EVENTS` env variable:
+/// ```sh
+/// RUST_LOG=debug RUST_LOG_SPAN_EVENTS=full \
+///   cargo test --features trace trace_with_custom_runtime -- --nocapture
+/// ```
 #[test_log::test]
 fn trace_with_custom_runtime() {
   let rt = Builder::new_current_thread().build().unwrap();
@@ -81,6 +94,14 @@ fn trace_with_custom_runtime() {
 
 #[test_log::test(tokio::test)]
 async fn trace_with_tokio_attribute() {
+  instrumented(6).await;
+  instrumented(4).await;
+  debug!("done");
+}
+
+#[test_log::test(tokio::test)]
+#[test_log(default_log_filter = "info")]
+async fn trace_with_default_log_filter() {
   instrumented(6).await;
   instrumented(4).await;
   debug!("done");
