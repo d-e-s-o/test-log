@@ -17,7 +17,6 @@ use quote::quote;
 use syn::parse_macro_input;
 use syn::ItemFn;
 
-
 /// A procedural macro for the `test` attribute.
 ///
 /// The attribute can be used to define a test that has the `env_logger`
@@ -72,12 +71,18 @@ use syn::ItemFn;
 /// ```
 #[proc_macro_attribute]
 pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
+  let item = parse_macro_input!(item as ItemFn);
+  try_test(attr, item)
+    .unwrap_or_else(syn::Error::into_compile_error)
+    .into()
+}
+
+fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
   let inner_test = if attr.is_empty() {
     quote! { ::core::prelude::v1::test }
   } else {
     attr.into()
   };
-  let input = parse_macro_input!(item as ItemFn);
 
   let ItemFn {
     attrs,
@@ -115,9 +120,8 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
       #block
     }
   };
-  result.into()
+  Ok(result)
 }
-
 
 /// Expand the initialization code for the `log` crate.
 fn expand_logging_init() -> Tokens {
@@ -130,7 +134,6 @@ fn expand_logging_init() -> Tokens {
   #[cfg(not(feature = "log"))]
   quote! {}
 }
-
 
 /// Expand the initialization code for the `tracing` crate.
 fn expand_tracing_init() -> Tokens {
