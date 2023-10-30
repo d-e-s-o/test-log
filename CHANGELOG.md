@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Improved compile error output on wrong usage
+
+
 0.2.13
 ------
 - Improved interaction with nested attributes (such as those used by the

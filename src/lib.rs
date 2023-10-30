@@ -72,12 +72,19 @@ use syn::ItemFn;
 /// ```
 #[proc_macro_attribute]
 pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
+  let item = parse_macro_input!(item as ItemFn);
+  try_test(attr, item)
+    .unwrap_or_else(syn::Error::into_compile_error)
+    .into()
+}
+
+
+fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
   let inner_test = if attr.is_empty() {
     quote! { ::core::prelude::v1::test }
   } else {
     attr.into()
   };
-  let input = parse_macro_input!(item as ItemFn);
 
   let ItemFn {
     attrs,
@@ -115,7 +122,7 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
       #block
     }
   };
-  result.into()
+  Ok(result)
 }
 
 
