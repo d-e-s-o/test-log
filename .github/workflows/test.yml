@@ -63,6 +63,7 @@ jobs:
           # bumping version.
           toolchain: 1.56
           default: true
+      - uses: Swatinem/rust-cache@v2
       - name: Build
         run: cargo build --locked --all-features
   rustfmt:
