@@ -1,6 +1,8 @@
 blank_lines_lower_bound = 0
 blank_lines_upper_bound = 2
 edition = "2018"
+imports_granularity = "item"
+imports_layout = "Vertical"
 match_block_trailing_comma = true
 tab_spaces = 2
 trailing_semicolon = false
