@@ -26,18 +26,7 @@ jobs:
     - uses: dtolnay/rust-toolchain@master
       with:
         toolchain: ${{ matrix.rust }}
-    - if: ${{ matrix.profile == 'dev' }}
-      name: Build & test dev
-      run: |
-        cargo build
-        cargo build --all-features
-        cargo test
-    # We need to duplicate the logic here, because up to 1.56 Cargo
-    # considers the --profile option unstable. Once our minimum
-    # supported Rust version is above that, we should remove the above
-    # block.
-    - if: ${{ matrix.rust == 'stable' && matrix.profile != 'dev'}}
-      name: Build & test release
+    - name: Build & test
       run: |
         cargo build --profile=${{ matrix.profile }}
         cargo build --all-features --profile=${{ matrix.profile }}
