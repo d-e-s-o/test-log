@@ -28,7 +28,6 @@ tracing infrastructure before running tests.
 include = ["src/lib.rs", "LICENSE-*", "README.md", "CHANGELOG.md"]
 
 [lib]
-proc-macro = true
 
 [[test]]
 name = "default_log_filter"
@@ -36,19 +35,20 @@ required-features = ["log"]
 
 [features]
 default = ["log"]
-trace = []
-log = []
+# TODO: use "dep:{tracing-subscriber,evn_logger}" once our MSRV is 1.60 or higher.
+trace = ["tracing-subscriber", "test-log-macros/trace"]
+log = ["env_logger", "test-log-macros/log"]
+
+[workspace]
+members = ["crates/*"]
 
 [dependencies]
-proc-macro2 = {version = "1.0.32", default-features = false}
-quote = {version = "1.0", default-features = false}
-syn = {version = "2.0", default-features = false, features = ["full", "parsing", "printing", "proc-macro"]}
+test-log-macros = {path = "crates/test-log-macros"}
+tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"]}
+env_logger = {version = "0.9.3", default-features = false, optional = true}
 
 [dev-dependencies]
-env_logger = {version = "0.9", default-features = false}
 logging = {version = "0.4.8", package = "log"}
 test-case = {version = "3.1"}
 tokio = {version = "1.0", default-features = false, features = ["rt-multi-thread", "macros"]}
 tracing = {version = "0.1.20"}
-tracing-futures = {version = "0.2", default-features = false, features = ["std-future"]}
-tracing-subscriber = {version = "0.3.10", default-features = false, features = ["env-filter", "fmt", "std"]}
