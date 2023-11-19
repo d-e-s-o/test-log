@@ -113,17 +113,6 @@ Depending on what backend the crate-under-test (and its dependencies)
 use, the respective feature should be enabled to make messages that are
 emitted by the test manifest on the console.
 
-Note that as a user you are required to explicitly add `env_logger` or
-`tracing-subscriber` as a dependency to your project-under-test (when
-enabling the `log` or `trace` feature, respectively). E.g.,
-
-```toml
-[dev-dependencies]
-env_logger = "*"
-tracing-subscriber = {version = "0.3.10", default-features = false, features = ["env-filter", "fmt", "std"]}
-```
-
-
 [docs-rs]: https://docs.rs/crate/test-log
 [env-docs-rs]: https://docs.rs/env_logger/0.9.0/env_logger
 [log]: https://crates.io/crates/log
