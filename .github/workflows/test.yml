@@ -26,6 +26,9 @@ jobs:
     - uses: dtolnay/rust-toolchain@master
       with:
         toolchain: ${{ matrix.rust }}
+    - uses: Swatinem/rust-cache@v2
+      with:
+        key: ${{ matrix.profile }}
     - name: Build & test
       run: |
         cargo build --profile=${{ matrix.profile }}
@@ -63,6 +66,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
       - run: cargo clippy --no-deps --all-targets --all-features -- -A unknown_lints -D warnings
   rustdoc:
     name: Generate documentation
@@ -72,4 +76,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
       - run: cargo doc --no-deps
