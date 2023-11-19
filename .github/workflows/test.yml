@@ -23,11 +23,9 @@ jobs:
         profile: [dev, release]
     steps:
     - uses: actions/checkout@v4
-    - uses: actions-rs/toolchain@v1
+    - uses: dtolnay/rust-toolchain@master
       with:
         toolchain: ${{ matrix.rust }}
-        profile: minimal
-        override: true
     - if: ${{ matrix.profile == 'dev' }}
       name: Build & test dev
       run: |
@@ -50,19 +48,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Nightly Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly
+        uses: dtolnay/rust-toolchain@nightly
       - run: cargo +nightly -Z minimal-versions update
       - name: Install minimum Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@master
         with:
-          profile: minimal
           # Please adjust README and rust-version field in Cargo.toml files when
           # bumping version.
           toolchain: 1.56
-          default: true
       - uses: Swatinem/rust-cache@v2
       - name: Build
         run: cargo build --locked --all-features
@@ -71,22 +64,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@nightly
         with:
-          toolchain: nightly
           components: rustfmt
-          override: true
       - run: cargo +nightly fmt -- --check
   clippy:
     name: Lint with clippy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          components: clippy
-          override: true
+      - uses: dtolnay/rust-toolchain@stable
       - run: cargo clippy --no-deps --all-targets --all-features -- -A unknown_lints -D warnings
   rustdoc:
     name: Generate documentation
@@ -95,8 +82,5 @@ jobs:
       RUSTDOCFLAGS: '-D warnings -D rustdoc::broken_intra_doc_links'
     steps:
       - uses: actions/checkout@v4
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
+      - uses: dtolnay/rust-toolchain@stable
       - run: cargo doc --no-deps
