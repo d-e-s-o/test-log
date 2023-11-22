@@ -22,24 +22,14 @@ jobs:
         rust: [stable]
         profile: [dev, release]
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions-rs/toolchain@v1
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@master
       with:
         toolchain: ${{ matrix.rust }}
-        profile: minimal
-        override: true
-    - if: ${{ matrix.profile == 'dev' }}
-      name: Build & test dev
-      run: |
-        cargo build
-        cargo build --all-features
-        cargo test
-    # We need to duplicate the logic here, because up to 1.56 Cargo
-    # considers the --profile option unstable. Once our minimum
-    # supported Rust version is above that, we should remove the above
-    # block.
-    - if: ${{ matrix.rust == 'stable' && matrix.profile != 'dev'}}
-      name: Build & test release
+    - uses: Swatinem/rust-cache@v2
+      with:
+        key: ${{ matrix.profile }}
+    - name: Build & test
       run: |
         cargo build --profile=${{ matrix.profile }}
         cargo build --all-features --profile=${{ matrix.profile }}
@@ -48,21 +38,16 @@ jobs:
     name: Build using minimum versions of dependencies
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Nightly Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly
+        uses: dtolnay/rust-toolchain@nightly
       - run: cargo +nightly -Z minimal-versions update
       - name: Install minimum Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@master
         with:
-          profile: minimal
           # Please adjust README and rust-version field in Cargo.toml files when
           # bumping version.
           toolchain: 1.56
-          default: true
       - uses: Swatinem/rust-cache@v2
       - name: Build
         run: cargo build --locked --all-features
@@ -70,23 +55,18 @@ jobs:
     name: Check code formatting
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
         with:
-          toolchain: nightly
           components: rustfmt
-          override: true
       - run: cargo +nightly fmt -- --check
   clippy:
     name: Lint with clippy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          components: clippy
-          override: true
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
       - run: cargo clippy --no-deps --all-targets --all-features -- -A unknown_lints -D warnings
   rustdoc:
     name: Generate documentation
@@ -94,9 +74,7 @@ jobs:
     env:
       RUSTDOCFLAGS: '-D warnings -D rustdoc::broken_intra_doc_links'
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
       - run: cargo doc --no-deps
