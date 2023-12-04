@@ -27,16 +27,20 @@ pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
 
 fn parse_attrs(attrs: Vec<Attribute>) -> syn::Result<(AttributeArgs, Vec<Attribute>)> {
   let mut attribute_args = AttributeArgs::default();
-  let mut ignored_attrs = vec![];
-  for attr in attrs {
-    let matched = attribute_args.try_parse_attr_single(&attr)?;
-    // Keep only attrs that didn't match the #[test_log(_)] syntax.
-    if !matched {
-      ignored_attrs.push(attr);
+  if cfg!(feature = "unstable") {
+    let mut ignored_attrs = vec![];
+    for attr in attrs {
+      let matched = attribute_args.try_parse_attr_single(&attr)?;
+      // Keep only attrs that didn't match the #[test_log(_)] syntax.
+      if !matched {
+        ignored_attrs.push(attr);
+      }
     }
-  }
 
-  Ok((attribute_args, ignored_attrs))
+    Ok((attribute_args, ignored_attrs))
+  } else {
+    Ok((attribute_args, attrs))
+  }
 }
 
 fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {

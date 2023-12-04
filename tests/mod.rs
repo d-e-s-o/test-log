@@ -99,6 +99,7 @@ async fn trace_with_tokio_attribute() {
   debug!("done");
 }
 
+#[cfg(feature = "unstable")]
 #[test_log::test(tokio::test)]
 #[test_log(default_log_filter = "info")]
 async fn trace_with_default_log_filter() {

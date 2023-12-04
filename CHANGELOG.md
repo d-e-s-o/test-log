@@ -3,7 +3,7 @@ Unreleased
 - Factored out `test-log-macros` crate to relieve users from having to
   care about tracing/logging dependencies themselves
 - Introduced `default_log_filter` attribute for setting the default log
-  filter on a per-test basis
+  filter on a per-test basis behind new `unstable` feature
 - Improved compile error output on wrong usage
 
 

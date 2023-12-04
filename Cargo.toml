@@ -29,13 +29,16 @@ include = ["src/lib.rs", "LICENSE-*", "README.md", "CHANGELOG.md"]
 
 [[test]]
 name = "default_log_filter"
-required-features = ["log"]
+required-features = ["log", "unstable"]
 
 [features]
 default = ["log"]
 # TODO: use "dep:{tracing-subscriber,evn_logger}" once our MSRV is 1.60 or higher.
 trace = ["tracing-subscriber", "test-log-macros/trace"]
 log = ["env_logger", "test-log-macros/log"]
+# Enable unstable features. These are generally exempt from any semantic
+# versioning guarantees.
+unstable = ["test-log-macros/unstable"]
 
 [workspace]
 members = ["macros"]

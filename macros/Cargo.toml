@@ -12,6 +12,7 @@ proc-macro = true
 [features]
 trace = []
 log = []
+unstable = []
 
 [dependencies]
 proc-macro2 = {version = "1.0.32", default-features = false}
