@@ -2,8 +2,8 @@
 name = "test-log-macros"
 version = "0.2.13"
 authors = ["Daniel Mueller <deso@posteo.net>"]
-edition = "2018"
-rust-version = "1.56"
+edition = "2021"
+rust-version = "1.61"
 license = "Apache-2.0 OR MIT"
 
 [lib]

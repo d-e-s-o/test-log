@@ -5,6 +5,7 @@ Unreleased
 - Introduced `default_log_filter` attribute for setting the default log
   filter on a per-test basis behind new `unstable` feature
 - Improved compile error output on wrong usage
+- Bumped minimum supported Rust version to `1.61`
 
 
 0.2.13
