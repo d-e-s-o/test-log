@@ -46,7 +46,7 @@ members = ["macros"]
 [dependencies]
 test-log-macros = {path = "macros"}
 tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"]}
-env_logger = {version = "0.9.3", default-features = false, optional = true}
+env_logger = {version = "0.10", default-features = false, optional = true}
 
 [dev-dependencies]
 logging = {version = "0.4.8", package = "log"}

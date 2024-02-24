@@ -6,6 +6,7 @@ Unreleased
   filter on a per-test basis behind new `unstable` feature
 - Improved compile error output on wrong usage
 - Bumped minimum supported Rust version to `1.61`
+- Bumped `env_logger` dependency to `0.10`
 
 
 0.2.13
