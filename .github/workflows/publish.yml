@@ -23,9 +23,15 @@ jobs:
         #   file://<path>/<crate>#<version>
         # but could also be along the lines of
         #   file://<path>/<crate>#<actual-crate-name>@<version>
-        version="$(echo ${pkgid} | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
+        version="$(echo ${pkgid}                   | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
+        macros_version="$(cd macros && cargo pkgid | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
+
         if [ -z "${version}" ]; then
           echo "Invalid version string: ${pkgid}"
+          exit 1
+        fi
+        if [ "${version}" != "${macros_version}" ]; then
+          echo "test-log and test-log-macros have differing version (${version} vs. ${macros_version}"
           exit 1
         fi
         echo "Determined crate version: ${version}"
@@ -40,7 +46,9 @@ jobs:
     - uses: actions/checkout@v3
     - uses: dtolnay/rust-toolchain@stable
     - name: Dry-run package creation
-      run: cargo package --no-verify
+      # Can't verify test-log for it may depend on yet-to-be-published
+      # test-log-macros.
+      run: cargo package --package macros --workspace --exclude test-log
     - name: Create git tag
       env:
         version: ${{ needs.version.outputs.version }}
@@ -59,7 +67,11 @@ jobs:
               \"prerelease\":false,
               \"generate_release_notes\":false
             }"
-    - name: Publish
+    - name: Publish test-log-macros
+      run: cd macros/ && cargo publish --no-verify --token "${CARGO_REGISTRY_TOKEN}"
+      env:
+        CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+    - name: Publish test-log
       run: cargo publish --no-verify --token "${CARGO_REGISTRY_TOKEN}"
       env:
         CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
