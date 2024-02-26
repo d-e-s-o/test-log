@@ -1,5 +1,6 @@
 Unreleased
 ----------
+- Formalized MSRV policy
 - Bumped minimum supported Rust version to `1.71`
 - Bumped `env_logger` dependency to `0.11`
 
