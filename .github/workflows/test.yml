@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2023 Daniel Mueller <deso@posteo.net>
+# Copyright (C) 2022-2024 Daniel Mueller <deso@posteo.net>
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 name: Test
@@ -6,6 +6,9 @@ name: Test
 on:
   pull_request:
   push:
+    branches:
+      - '**'
+      - '!dependabot/**'
   workflow_call:
 
 env:
