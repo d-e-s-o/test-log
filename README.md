@@ -113,8 +113,16 @@ Depending on what backend the crate-under-test (and its dependencies)
 use, the respective feature should be enabled to make messages that are
 emitted by the test manifest on the console.
 
+#### MSRV Policy
+This crate adheres to Cargo's [semantic versioning rules][cargo-semver].
+At a minimum, it builds with the most recent Rust stable release minus
+five minor versions ("N - 5"). E.g., assuming the most recent Rust
+stable is `1.68`, the crate is guaranteed to build with `1.63` and
+higher.
+
+[cargo-semver]: https://doc.rust-lang.org/cargo/reference/resolver.html#semver-compatibility
 [docs-rs]: https://docs.rs/crate/test-log
-[env-docs-rs]: https://docs.rs/env_logger/0.10.1/env_logger
+[env-docs-rs]: https://docs.rs/env_logger/0.11.2/env_logger
 [log]: https://crates.io/crates/log
 [tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
 [tracing]: https://crates.io/crates/tracing
