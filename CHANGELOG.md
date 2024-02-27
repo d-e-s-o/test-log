@@ -1,3 +1,9 @@
+Unreleased
+----------
+- Bumped minimum supported Rust version to `1.71`
+- Bumped `env_logger` dependency to `0.11`
+
+
 0.2.14
 ------
 - Factored out `test-log-macros` crate to relieve users from having to
