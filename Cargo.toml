@@ -1,6 +1,6 @@
 [package]
 name = "test-log"
-version = "0.2.13"
+version = "0.2.14"
 authors = ["Daniel Mueller <deso@posteo.net>"]
 edition = "2021"
 rust-version = "1.61"
@@ -29,6 +29,7 @@ include = ["src/lib.rs", "LICENSE-*", "README.md", "CHANGELOG.md"]
 
 [[test]]
 name = "default_log_filter"
+path = "tests/default_log_filter.rs"
 required-features = ["log", "unstable"]
 
 [features]
@@ -44,7 +45,7 @@ unstable = ["test-log-macros/unstable"]
 members = ["macros"]
 
 [dependencies]
-test-log-macros = {path = "macros"}
+test-log-macros = {version = "0.2.14", path = "macros"}
 tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"]}
 env_logger = {version = "0.10", default-features = false, optional = true}
 

@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.14
+------
 - Factored out `test-log-macros` crate to relieve users from having to
   care about tracing/logging dependencies themselves
 - Introduced `default_log_filter` attribute for setting the default log
