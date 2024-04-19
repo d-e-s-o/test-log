@@ -45,13 +45,38 @@ fn parse_attrs(attrs: Vec<Attribute>) -> syn::Result<(AttributeArgs, Vec<Attribu
   }
 }
 
-fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
-  let inner_test = if attr.is_empty() {
-    quote! { ::core::prelude::v1::test }
-  } else {
-    attr.into()
+// Check whether given attribute is a test attribute of forms:
+// * `#[test]`
+// * `#[core::prelude::*::test]` or `#[::core::prelude::*::test]`
+// * `#[std::prelude::*::test]` or `#[::std::prelude::*::test]`
+fn is_test_attribute(attr: &Attribute) -> bool {
+  let path = match &attr.meta {
+    syn::Meta::Path(path) => path,
+    _ => return false,
   };
+  let candidates = [
+    ["core", "prelude", "*", "test"],
+    ["std", "prelude", "*", "test"],
+  ];
+  if path.leading_colon.is_none()
+    && path.segments.len() == 1
+    && path.segments[0].arguments.is_none()
+    && path.segments[0].ident == "test"
+  {
+    return true;
+  } else if path.segments.len() != candidates[0].len() {
+    return false;
+  }
+  candidates.into_iter().any(|segments| {
+    path
+      .segments
+      .iter()
+      .zip(segments)
+      .all(|(segment, path)| segment.arguments.is_none() && (path == "*" || segment.ident == path))
+  })
+}
 
+fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
   let ItemFn {
     attrs,
     vis,
@@ -63,9 +88,23 @@ fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
   let logging_init = expand_logging_init(&attribute_args);
   let tracing_init = expand_tracing_init(&attribute_args);
 
+  let (inner_test, generated_test) = if attr.is_empty() {
+    let has_test = ignored_attrs.iter().any(is_test_attribute);
+    let generated_test = if has_test {
+      quote! {}
+    } else {
+      quote! { #[::core::prelude::v1::test]}
+    };
+    (quote! {}, generated_test)
+  } else {
+    let attr = Tokens::from(attr);
+    (quote! { #[#attr] }, quote! {})
+  };
+
   let result = quote! {
-    #[#inner_test]
+    #inner_test
     #(#ignored_attrs)*
+    #generated_test
     #vis #sig {
       // We put all initialization code into a separate module here in
       // order to prevent potential ambiguities that could result in
