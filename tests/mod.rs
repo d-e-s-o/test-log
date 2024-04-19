@@ -5,6 +5,7 @@
 
 use tokio::runtime::Builder;
 
+use rstest::rstest;
 use tracing::debug;
 use tracing::error;
 use tracing::info;
@@ -54,6 +55,49 @@ fn with_inner_test_attribute_and_test_args_and_name(x: i8, y: i8) {
 #[should_panic]
 #[test_log::test(test_case::test_case(-2, -4))]
 fn with_inner_test_attribute_and_test_args_and_panic(x: i8, _y: i8) {
+  assert_eq!(x, 0);
+}
+
+#[test_log::test]
+#[test]
+fn with_existing_test_attribute() {}
+
+#[test_log::test]
+#[::core::prelude::v1::test]
+fn with_existing_generated_test_attribute() {}
+
+#[tokio::test]
+#[test_log::test]
+async fn with_append_test_attribute_and_async() {
+  assert_eq!(async { 42 }.await, 42)
+}
+
+#[rstest]
+#[case(-2, -4)]
+#[case(-2, -5)]
+#[test_log::test]
+fn with_append_test_attribute_and_test_args(#[case] x: i8, #[case] _y: i8) {
+  assert_eq!(x, -2);
+}
+
+#[rstest]
+#[case(-2, -4)]
+#[case(-3, -4)]
+#[test_log::test]
+// Applied to all cases, must not come before `rstest`, see https://github.com/la10736/rstest/issues/210
+#[should_panic] // https://docs.rs/rstest/0.25.0/rstest/attr.rstest.html#use-specific-case-attributes
+fn with_append_test_attribute_and_test_args_and_panic(#[case] x: i8, #[case] _y: i8) {
+  assert_eq!(x, 0);
+}
+
+#[rstest]
+#[case(-2, -4)]
+#[case(-3, -4)]
+#[tokio::test]
+#[test_log::test]
+// Applied to all cases, must not come before `rstest`, see https://github.com/la10736/rstest/issues/210
+#[should_panic] // https://docs.rs/rstest/0.25.0/rstest/attr.rstest.html#use-specific-case-attributes
+async fn with_append_test_attribute_and_test_args_and_panic_async(#[case] x: i8, #[case] _y: i8) {
   assert_eq!(x, 0);
 }
 
