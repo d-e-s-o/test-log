@@ -151,7 +151,7 @@ impl AttributeArgs {
 
 
 /// Expand the initialization code for the `log` crate.
-#[cfg(feature = "log")]
+#[cfg(all(feature = "log", not(feature = "trace")))]
 fn expand_logging_init(attribute_args: &AttributeArgs) -> Tokens {
   let add_default_log_filter = if let Some(default_log_filter) = &attribute_args.default_log_filter
   {
@@ -172,7 +172,7 @@ fn expand_logging_init(attribute_args: &AttributeArgs) -> Tokens {
   }
 }
 
-#[cfg(not(feature = "log"))]
+#[cfg(not(all(feature = "log", not(feature = "trace"))))]
 fn expand_logging_init(_attribute_args: &AttributeArgs) -> Tokens {
   quote! {}
 }
