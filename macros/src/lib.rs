@@ -4,7 +4,7 @@
 extern crate proc_macro;
 
 use proc_macro::TokenStream;
-use proc_macro2::TokenStream as Tokens;
+use proc_macro2::{Ident, TokenStream as Tokens};
 
 use quote::quote;
 
@@ -15,7 +15,6 @@ use syn::Expr;
 use syn::ItemFn;
 use syn::Lit;
 use syn::Meta;
-
 
 #[proc_macro_attribute]
 pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -59,7 +58,7 @@ fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
 
   let (attribute_args, ignored_attrs) = parse_attrs(attrs)?;
   let logging_init = expand_logging_init(&attribute_args);
-  let tracing_init = expand_tracing_init(&attribute_args);
+  let tracing_init = expand_tracing_init(&sig.ident, &attribute_args);
 
   let result = quote! {
     #[#inner_test]
@@ -76,20 +75,27 @@ fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
       // The alternative would be to use fully qualified call syntax in
       // all initialization code, but that's much harder to control.
       mod init {
-        pub fn init() {
+        pub struct Guard<T> {
+            tracing: T,
+        }
+
+        pub fn init() -> Guard<impl std::any::Any> {
           #logging_init
-          #tracing_init
+          Guard {
+            tracing: {
+              #tracing_init
+            },
+          }
         }
       }
 
-      init::init();
+      let _ = init::init();
 
       #block
     }
   };
   Ok(result)
 }
-
 
 #[derive(Debug, Default)]
 struct AttributeArgs {
@@ -99,7 +105,7 @@ struct AttributeArgs {
 impl AttributeArgs {
   fn try_parse_attr_single(&mut self, attr: &Attribute) -> syn::Result<bool> {
     if !attr.path().is_ident("test_log") {
-      return Ok(false)
+      return Ok(false);
     }
 
     let nested_meta = attr.parse_args_with(Meta::parse)?;
@@ -109,7 +115,7 @@ impl AttributeArgs {
       return Err(syn::Error::new_spanned(
         &nested_meta,
         "Expected NameValue syntax, e.g. 'default_log_filter = \"debug\"'.",
-      ))
+      ));
     };
 
     let ident = if let Some(ident) = name_value.path.get_ident() {
@@ -118,7 +124,7 @@ impl AttributeArgs {
       return Err(syn::Error::new_spanned(
         &name_value.path,
         "Expected NameValue syntax, e.g. 'default_log_filter = \"debug\"'.",
-      ))
+      ));
     };
 
     let arg_ref = if ident == "default_log_filter" {
@@ -127,7 +133,7 @@ impl AttributeArgs {
       return Err(syn::Error::new_spanned(
         &name_value.path,
         "Unrecognized attribute, see documentation for details.",
-      ))
+      ));
     };
 
     if let Expr::Lit(lit) = &name_value.value {
@@ -142,13 +148,12 @@ impl AttributeArgs {
       return Err(syn::Error::new_spanned(
         &name_value.value,
         "Failed to parse value, expected a string",
-      ))
+      ));
     }
 
     Ok(true)
   }
 }
-
 
 /// Expand the initialization code for the `log` crate.
 #[cfg(feature = "log")]
@@ -179,7 +184,7 @@ fn expand_logging_init(_attribute_args: &AttributeArgs) -> Tokens {
 
 /// Expand the initialization code for the `tracing` crate.
 #[cfg(feature = "trace")]
-fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
+fn expand_tracing_init(name: &Ident, attribute_args: &AttributeArgs) -> Tokens {
   let env_filter = if let Some(default_log_filter) = &attribute_args.default_log_filter {
     quote! {
       ::test_log::tracing_subscriber::EnvFilter::builder()
@@ -194,45 +199,16 @@ fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
     quote! { ::test_log::tracing_subscriber::EnvFilter::from_default_env() }
   };
 
+  let name = name.to_string();
+
   quote! {
-    {
-      let __internal_event_filter = {
-        use ::test_log::tracing_subscriber::fmt::format::FmtSpan;
-
-        match ::std::env::var_os("RUST_LOG_SPAN_EVENTS") {
-          Some(mut value) => {
-            value.make_ascii_lowercase();
-            let value = value.to_str().expect("test-log: RUST_LOG_SPAN_EVENTS must be valid UTF-8");
-            value
-              .split(",")
-              .map(|filter| match filter.trim() {
-                "new" => FmtSpan::NEW,
-                "enter" => FmtSpan::ENTER,
-                "exit" => FmtSpan::EXIT,
-                "close" => FmtSpan::CLOSE,
-                "active" => FmtSpan::ACTIVE,
-                "full" => FmtSpan::FULL,
-                _ => panic!("test-log: RUST_LOG_SPAN_EVENTS must contain filters separated by `,`.\n\t\
-                  For example: `active` or `new,close`\n\t\
-                  Supported filters: new, enter, exit, close, active, full\n\t\
-                  Got: {}", value),
-              })
-              .fold(FmtSpan::NONE, |acc, filter| filter | acc)
-          },
-          None => FmtSpan::NONE,
-        }
-      };
-
-      let _ = ::test_log::tracing_subscriber::FmtSubscriber::builder()
-        .with_env_filter(#env_filter)
-        .with_span_events(__internal_event_filter)
-        .with_test_writer()
-        .try_init();
-    }
+    let base = module_path!().split("::").map(std::path::Path::new).collect::<std::path::PathBuf>();
+    let name = format!("{}/{}", base.display(), #name);
+    Some(::test_log::tracing::init(&name, #env_filter))
   }
 }
 
 #[cfg(not(feature = "trace"))]
-fn expand_tracing_init(_attribute_args: &AttributeArgs) -> Tokens {
+fn expand_tracing_init(_name: &Ident, _attribute_args: &AttributeArgs) -> Tokens {
   quote! {}
 }

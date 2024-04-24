@@ -68,3 +68,7 @@ pub use tracing_subscriber;
 #[cfg(feature = "log")]
 #[doc(hidden)]
 pub use env_logger;
+
+#[cfg(feature = "trace")]
+#[doc(hidden)]
+pub mod tracing;
