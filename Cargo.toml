@@ -36,7 +36,7 @@ required-features = ["log", "unstable"]
 default = ["log"]
 # TODO: use "dep:{tracing-subscriber,evn_logger}" once our MSRV is 1.60 or higher.
 trace = ["tracing-subscriber", "test-log-macros/trace"]
-log = ["env_logger", "test-log-macros/log"]
+log = ["env_logger", "test-log-macros/log", "tracing-subscriber?/tracing-log"]
 # Enable unstable features. These are generally exempt from any semantic
 # versioning guarantees.
 unstable = ["test-log-macros/unstable"]
