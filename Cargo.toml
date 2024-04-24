@@ -37,6 +37,7 @@ default = ["log"]
 # TODO: use "dep:{tracing-subscriber,evn_logger}" once our MSRV is 1.60 or higher.
 trace = ["tracing-subscriber", "tracing-subscriber/ansi", "tracing-subscriber/tracing-log", "test-log-macros/trace"]
 log = ["env_logger", "test-log-macros/log"]
+tracing-flame = ["trace", "dep:tracing-flame"]
 # Enable unstable features. These are generally exempt from any semantic
 # versioning guarantees.
 unstable = ["test-log-macros/unstable"]
@@ -48,6 +49,8 @@ members = ["macros"]
 test-log-macros = {version = "0.2.15", path = "macros"}
 tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"]}
 env_logger = {version = "0.11", default-features = false, optional = true}
+
+tracing-flame = { version = "0.2.0", optional = true }
 
 [dev-dependencies]
 logging = {version = "0.4.8", package = "log"}

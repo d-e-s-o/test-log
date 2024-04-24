@@ -4,7 +4,7 @@
 extern crate proc_macro;
 
 use proc_macro::TokenStream;
-use proc_macro2::TokenStream as Tokens;
+use proc_macro2::{Ident, TokenStream as Tokens};
 
 use quote::quote;
 
@@ -58,7 +58,7 @@ fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
 
   let (attribute_args, ignored_attrs) = parse_attrs(attrs)?;
   let logging_init = expand_logging_init(&attribute_args);
-  let tracing_init = expand_tracing_init(&attribute_args);
+  let tracing_init = expand_tracing_init(&sig.ident, &attribute_args);
 
   let result = quote! {
     #[#inner_test]
@@ -75,13 +75,21 @@ fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
       // The alternative would be to use fully qualified call syntax in
       // all initialization code, but that's much harder to control.
       mod init {
-        pub fn init() {
+        pub struct Guard<T> {
+            tracing: T,
+        }
+
+        pub fn init() -> Guard<impl std::any::Any> {
           #logging_init
-          #tracing_init
+          Guard {
+            tracing: {
+              #tracing_init
+            },
+          }
         }
       }
 
-      init::init();
+      let _ = init::init();
 
       #block
     }
@@ -176,7 +184,7 @@ fn expand_logging_init(_attribute_args: &AttributeArgs) -> Tokens {
 
 /// Expand the initialization code for the `tracing` crate.
 #[cfg(feature = "trace")]
-fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
+fn expand_tracing_init(name: &Ident, attribute_args: &AttributeArgs) -> Tokens {
   let env_filter = if let Some(default_log_filter) = &attribute_args.default_log_filter {
     quote! {
       ::test_log::tracing_subscriber::EnvFilter::builder()
@@ -191,12 +199,16 @@ fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
     quote! { ::test_log::tracing_subscriber::EnvFilter::from_default_env() }
   };
 
+  let name = name.to_string();
+
   quote! {
-      ::test_log::tracing::init(#env_filter);
+    let base = module_path!().split("::").map(std::path::Path::new).collect::<std::path::PathBuf>();
+    let name = format!("{}/{}", base.display(), #name);
+    Some(::test_log::tracing::init(&name, #env_filter))
   }
 }
 
 #[cfg(not(feature = "trace"))]
-fn expand_tracing_init(_attribute_args: &AttributeArgs) -> Tokens {
+fn expand_tracing_init(_name: &Ident, _attribute_args: &AttributeArgs) -> Tokens {
   quote! {}
 }
