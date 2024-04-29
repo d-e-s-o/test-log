@@ -33,10 +33,11 @@ path = "tests/default_log_filter.rs"
 required-features = ["log", "unstable"]
 
 [features]
-default = ["log"]
+default = ["log", "color"]
 # TODO: use "dep:{tracing-subscriber,evn_logger}" once our MSRV is 1.60 or higher.
 trace = ["tracing-subscriber", "test-log-macros/trace"]
 log = ["env_logger", "test-log-macros/log", "tracing-subscriber?/tracing-log"]
+color = ["env_logger?/auto-color", "tracing-subscriber?/ansi"]
 # Enable unstable features. These are generally exempt from any semantic
 # versioning guarantees.
 unstable = ["test-log-macros/unstable"]
