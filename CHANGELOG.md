@@ -1,3 +1,9 @@
+Unreleased
+----------
+- Use `tracing-subscriber`'s `tracing-log` feature to unify log output
+  if both `log` and `trace` features are enabled
+
+
 0.2.15
 ------
 - Formalized MSRV policy
