@@ -1,4 +1,4 @@
-# Copyright (C) 2023 Daniel Mueller <deso@posteo.net>
+# Copyright (C) 2023-2024 Daniel Mueller <deso@posteo.net>
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 name: Publish
@@ -54,6 +54,7 @@ jobs:
         version: ${{ needs.version.outputs.version }}
       run: |
         curl --location \
+          --fail-with-body \
           --request POST \
           --url https://api.github.com/repos/${{ github.repository }}/releases \
           --header "Accept: application/vnd.github+json" \
