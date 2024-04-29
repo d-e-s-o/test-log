@@ -1,6 +1,6 @@
 [![pipeline](https://github.com/d-e-s-o/test-log/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/d-e-s-o/test-log/actions/workflows/test.yml)
 [![crates.io](https://img.shields.io/crates/v/test-log.svg)](https://crates.io/crates/test-log)
-[![Docs](https://docs.rs/test-log/badge.svg)](https://docs.rs/test-log)
+[![Docs](https://docs.rs/test-log/badge.svg)][docs-rs]
 [![rustc](https://img.shields.io/badge/rustc-1.71+-blue.svg)](https://blog.rust-lang.org/2023/07/13/Rust-1.71.0.html)
 
 test-log
@@ -121,7 +121,7 @@ stable is `1.68`, the crate is guaranteed to build with `1.63` and
 higher.
 
 [cargo-semver]: https://doc.rust-lang.org/cargo/reference/resolver.html#semver-compatibility
-[docs-rs]: https://docs.rs/crate/test-log
+[docs-rs]: https://docs.rs/test-log
 [env-docs-rs]: https://docs.rs/env_logger/0.11.2/env_logger
 [log]: https://crates.io/crates/log
 [tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
