@@ -103,8 +103,9 @@ $ cargo test -- --nocapture
 
 Furthermore, the `RUST_LOG` environment variable is honored and can be
 used to influence the log level to work with (among other things).
-Please refer to the [`env_logger` docs][env-docs-rs] for more
-information.
+Please refer to the [`env_logger` docs][env-docs-rs] and
+[`tracing-subscriber`][tracing-env-docs-rs] documentation for supported
+syntax and more information.
 
 If the `trace` feature is enabled, the `RUST_LOG_SPAN_EVENTS`
 environment variable can be used to configure the tracing subscriber to
@@ -129,4 +130,5 @@ higher.
 [log]: https://crates.io/crates/log
 [tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
 [tracing]: https://crates.io/crates/tracing
-[tracing-events-docs-rs]: https://docs.rs/tracing-subscriber/0.3.1/tracing_subscriber/fmt/struct.SubscriberBuilder.html#method.with_span_events
+[tracing-env-docs-rs]: https://docs.rs/tracing-subscriber/0.3.18/tracing_subscriber/filter/struct.EnvFilter.html#directives
+[tracing-events-docs-rs]: https://docs.rs/tracing-subscriber/0.3.18/tracing_subscriber/fmt/struct.SubscriberBuilder.html#method.with_span_events
