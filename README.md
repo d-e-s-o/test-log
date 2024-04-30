@@ -77,6 +77,21 @@ async fn it_still_works() {
 }
 ```
 
+#### Features
+
+The crate comes with two features pertaining "backend" initialization:
+- `log`, enabled by default, controls initialization for the `log`
+  crate.
+- `trace`, disabled by default, controls initialization for the
+  `tracing` crate.
+
+Depending on what backend the crate-under-test (and its dependencies)
+use, the respective feature(s) should be enabled to make messages that
+are emitted by the test manifest on the terminal.
+
+On top of that, the `color` feature (enabled by default) controls
+whether to color output by default.
+
 #### Logging Configuration
 
 As usual when running `cargo test`, the output is captured by the
@@ -100,21 +115,6 @@ to a comma-separated list of events you want to see. For example,
 Valid events are `new`, `enter`, `exit`, `close`, `active`, and `full`.
 See the [`tracing_subscriber` docs][tracing-events-docs-rs] for details
 on what the events mean.
-
-#### Features
-
-The crate comes with two features pertaining "backend" initialization:
-- `log`, enabled by default, controls initialization for the `log`
-  crate.
-- `trace`, disabled by default, controls initialization for the
-  `tracing` crate.
-
-Depending on what backend the crate-under-test (and its dependencies)
-use, the respective feature should be enabled to make messages that are
-emitted by the test manifest on the terminal.
-
-On top of that, the `color` feature (enabled by default) controls
-whether to color output by default.
 
 #### MSRV Policy
 This crate adheres to Cargo's [semantic versioning rules][cargo-semver].
