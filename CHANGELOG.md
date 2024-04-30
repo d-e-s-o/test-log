@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.16
+------
 - Use `tracing-subscriber`'s `tracing-log` feature to unify log output
   if both `log` and `trace` features are enabled
 - Added `color` feature to enable colored output (enabled by default)
