@@ -1,7 +1,16 @@
 // Copyright (C) 2019-2023 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+#![no_std]
+
 extern crate proc_macro;
+extern crate alloc;
+
+use alloc::{
+	string::String,
+	vec,
+	vec::Vec,
+};
 
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as Tokens;
@@ -199,10 +208,8 @@ fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
       let __internal_event_filter = {
         use ::test_log::tracing_subscriber::fmt::format::FmtSpan;
 
-        match ::std::env::var_os("RUST_LOG_SPAN_EVENTS") {
+        match ::core::option_env!("RUST_LOG_SPAN_EVENTS") {
           Some(mut value) => {
-            value.make_ascii_lowercase();
-            let value = value.to_str().expect("test-log: RUST_LOG_SPAN_EVENTS must be valid UTF-8");
             value
               .split(",")
               .map(|filter| match filter.trim() {
