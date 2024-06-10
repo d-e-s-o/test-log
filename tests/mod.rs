@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2023 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2019-2024 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 #![allow(clippy::eq_op)]
@@ -120,6 +120,7 @@ async fn trace_with_tokio_attribute_with_arguments() {
 // prevent accidental regressions. In the past we were susceptible to a
 // compilation error because generated code was using Iterator::map (but
 // not using fully qualified syntax).
+#[allow(dead_code)]
 trait Foo: Sized {
   fn map(self) {}
 }
