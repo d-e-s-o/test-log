@@ -3,14 +3,12 @@
 
 #![no_std]
 
-extern crate proc_macro;
 extern crate alloc;
+extern crate proc_macro;
 
-use alloc::{
-	string::String,
-	vec,
-	vec::Vec,
-};
+use alloc::string::String;
+use alloc::vec;
+use alloc::vec::Vec;
 
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as Tokens;
