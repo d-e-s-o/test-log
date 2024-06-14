@@ -33,7 +33,8 @@ path = "tests/default_log_filter.rs"
 required-features = ["log", "unstable"]
 
 [features]
-default = ["log", "color"]
+default = ["log", "color", "std"]
+std = ["test-log-macros/std"]
 trace = ["dep:tracing-subscriber", "test-log-macros/trace"]
 log = ["dep:env_logger", "test-log-macros/log", "tracing-subscriber?/tracing-log"]
 color = ["env_logger?/auto-color", "tracing-subscriber?/ansi"]
@@ -45,7 +46,7 @@ unstable = ["test-log-macros/unstable"]
 members = ["macros"]
 
 [dependencies]
-test-log-macros = {version = "0.2.15", path = "macros"}
+test-log-macros = {version = "0.2.15", default-features = false, path = "macros"}
 tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"]}
 env_logger = {version = "0.11", default-features = false, optional = true}
 

@@ -1,7 +1,7 @@
 // Copyright (C) 2019-2023 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-#![no_std]
+#![cfg_attr(not(feature = "std"), no_std)]
 
 extern crate alloc;
 extern crate proc_macro;
@@ -206,7 +206,16 @@ fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
       let __internal_event_filter = {
         use ::test_log::tracing_subscriber::fmt::format::FmtSpan;
 
-        match ::core::option_env!("RUST_LOG_SPAN_EVENTS") {
+        #[cfg(feature = "std")]
+        let env_var = match ::std::env::var("RUST_LOG_SPAN_EVENTS") {
+            Ok(val) => Some(val),
+            Err(::std::env::VarError::NotPresent) => None,
+            Err(::std::env::VarError::NotUnicode(os_string)) => panic!("RUST_LOG_SPAN_EVENTS must be unicode compliant, found {os_string:?}"),
+        };
+        #[cfg(not(feature = "std"))]
+        let env_var = ::core::option_env!("RUST_LOG_SPAN_EVENTS");
+
+        match env_var {
           Some(mut value) => {
             value
               .split(",")
