@@ -28,14 +28,20 @@ tracing infrastructure before running tests.
 include = ["src/lib.rs", "LICENSE-*", "README.md", "CHANGELOG.md"]
 
 [[test]]
+name = "no_std_test"
+path = "tests/no_std_required.rs"
+required-features = ["trace"]
+
+[[test]]
 name = "default_log_filter"
 path = "tests/default_log_filter.rs"
 required-features = ["log", "unstable"]
 
 [features]
-default = ["log", "color"]
+default = ["log", "color", "std"]
+std = ["test-log-macros/std"]
 trace = ["dep:tracing-subscriber", "test-log-macros/trace"]
-log = ["dep:env_logger", "test-log-macros/log", "tracing-subscriber?/tracing-log"]
+log = ["dep:env_logger", "test-log-macros/log", "tracing-subscriber?/tracing-log", "std"]
 color = ["env_logger?/auto-color", "tracing-subscriber?/ansi"]
 # Enable unstable features. These are generally exempt from any semantic
 # versioning guarantees.
@@ -45,7 +51,7 @@ unstable = ["test-log-macros/unstable"]
 members = ["macros"]
 
 [dependencies]
-test-log-macros = {version = "0.2.15", path = "macros"}
+test-log-macros = {version = "0.2.15", default-features = false, path = "macros"}
 tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"]}
 env_logger = {version = "0.11", default-features = false, optional = true}
 
