@@ -57,6 +57,44 @@ fn with_inner_test_attribute_and_test_args_and_panic(x: i8, _y: i8) {
   assert_eq!(x, 0);
 }
 
+#[test_log::test]
+#[test]
+fn with_existing_test_attribute() {}
+
+#[test_log::test]
+#[::core::prelude::v1::test]
+fn with_existing_generated_test_attribute() {}
+
+#[tokio::test]
+#[test_log::test]
+async fn with_append_test_attribute_and_async() {
+  assert_eq!(async { 42 }.await, 42)
+}
+
+#[test_case::test_case(-2, -4)]
+#[test_case::test_case(-2, -5)]
+#[test_log::test]
+fn with_append_test_attribute_and_test_args(x: i8, _y: i8) {
+  assert_eq!(x, -2);
+}
+
+#[should_panic]
+#[test_case::test_case(-2, -4)]
+#[test_case::test_case(-3, -4)]
+#[test_log::test]
+fn with_append_test_attribute_and_test_args_and_panic(x: i8, _y: i8) {
+  assert_eq!(x, 0);
+}
+
+#[should_panic]
+#[test_case::test_case(-2, -4)]
+#[test_case::test_case(-3, -4)]
+#[tokio::test]
+#[test_log::test]
+async fn with_append_test_attribute_and_test_args_and_panic_async(x: i8, _y: i8) {
+  assert_eq!(x, 0);
+}
+
 #[instrument]
 async fn instrumented(input: usize) -> usize {
   info!("input = {}", input);
