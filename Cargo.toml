@@ -46,14 +46,14 @@ members = ["macros"]
 
 [dependencies]
 test-log-macros = {version = "0.2.15", path = "macros"}
-tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"]}
+tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"], git = "https://github.com/d-e-s-o/tracing.git", branch = "topic/test-writer-stderr-v0.1.x"}
 env_logger = {version = "0.11", default-features = false, optional = true}
 
 [dev-dependencies]
 logging = {version = "0.4.8", package = "log"}
 test-case = {version = "3.1"}
 tokio = {version = "1.0", default-features = false, features = ["rt-multi-thread", "macros"]}
-tracing = {version = "0.1.20"}
+tracing = {version = "0.1.20", git = "https://github.com/d-e-s-o/tracing.git", branch = "topic/test-writer-stderr-v0.1.x"}
 
 # error: cannot find macro `__lazy_static_internal` in this scope
 #   --> ~/.cargo/registry/src/github.com-1ecc6299db9ec823/sharded-slab-0.1.4/src/tid.rs:33:1

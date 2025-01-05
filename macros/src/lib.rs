@@ -1,4 +1,4 @@
-// Copyright (C) 2019-2023 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2019-2025 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 extern crate proc_macro;
@@ -167,7 +167,9 @@ fn expand_logging_init(attribute_args: &AttributeArgs) -> Tokens {
     {
       let mut env_logger_builder = ::test_log::env_logger::builder();
       #add_default_log_filter
-      let _ = env_logger_builder.is_test(true).try_init();
+      let _ = env_logger_builder
+        .target(::test_log::env_logger::Target::Stderr)
+        .is_test(true).try_init();
     }
   }
 }
@@ -226,7 +228,7 @@ fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
       let _ = ::test_log::tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(#env_filter)
         .with_span_events(__internal_event_filter)
-        .with_test_writer()
+        .with_writer(::test_log::tracing_subscriber::fmt::TestWriter::with_stderr)
         .try_init();
     }
   }
