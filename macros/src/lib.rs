@@ -155,21 +155,20 @@ impl AttributeArgs {
 /// Expand the initialization code for the `log` crate.
 #[cfg(all(feature = "log", not(feature = "trace")))]
 fn expand_logging_init(attribute_args: &AttributeArgs) -> Tokens {
-  let add_default_log_filter = if let Some(default_log_filter) = &attribute_args.default_log_filter
-  {
-    quote! {
-      let env_logger_builder = env_logger_builder
-        .parse_env(::test_log::env_logger::Env::default().default_filter_or(#default_log_filter));
-    }
-  } else {
-    quote! {}
-  };
+  let default_filter = attribute_args
+    .default_log_filter
+    .as_ref()
+    .unwrap_or(&::std::borrow::Cow::Borrowed("info"));
 
   quote! {
     {
-      let mut env_logger_builder = ::test_log::env_logger::builder();
-      #add_default_log_filter
-      let _ = env_logger_builder.is_test(true).try_init();
+      let _result = ::test_log::env_logger::builder()
+        .parse_env(
+          ::test_log::env_logger::Env::default()
+            .default_filter_or(#default_filter)
+        )
+        .is_test(true)
+        .try_init();
     }
   }
 }

@@ -102,10 +102,11 @@ $ cargo test -- --nocapture
 ```
 
 Furthermore, the `RUST_LOG` environment variable is honored and can be
-used to influence the log level to work with (among other things).
-Please refer to the [`env_logger` docs][env-docs-rs] and
+used to influence the log level to work with (among other things). By
+default, log messages of criticality `INFO` (and higher) will be
+emitted. Please refer to the [`env_logger` docs][env-docs-rs] and
 [`tracing-subscriber`][tracing-env-docs-rs] documentation for supported
-syntax and more information.
+variable syntax and more information.
 
 If the `trace` feature is enabled, the `RUST_LOG_SPAN_EVENTS`
 environment variable can be used to configure the tracing subscriber to
