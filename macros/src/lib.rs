@@ -1,7 +1,9 @@
-// Copyright (C) 2019-2023 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2019-2025 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 extern crate proc_macro;
+
+use std::borrow::Cow;
 
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as Tokens;
@@ -93,7 +95,7 @@ fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
 
 #[derive(Debug, Default)]
 struct AttributeArgs {
-  default_log_filter: Option<String>,
+  default_log_filter: Option<Cow<'static, str>>,
 }
 
 impl AttributeArgs {
@@ -132,7 +134,7 @@ impl AttributeArgs {
 
     if let Expr::Lit(lit) = &name_value.value {
       if let Lit::Str(lit_str) = &lit.lit {
-        *arg_ref = Some(lit_str.value());
+        *arg_ref = Some(Cow::from(lit_str.value()));
       }
     }
 
