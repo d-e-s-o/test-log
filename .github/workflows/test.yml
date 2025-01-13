@@ -37,6 +37,7 @@ jobs:
         cargo build --profile=${{ matrix.profile }}
         cargo build --all-features --profile=${{ matrix.profile }}
         cargo test --profile=${{ matrix.profile }}
+        cargo test --no-default-features --features trace no_std_required --profile=${{ matrix.profile }}
   build-minimum:
     name: Build using minimum versions of dependencies
     runs-on: ubuntu-latest

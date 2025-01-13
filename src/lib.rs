@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 #![deny(missing_docs)]
+#![cfg_attr(not(feature = "std"), no_std)]
 
 //! A crate providing a replacement #[[macro@test]] attribute that
 //! initializes logging and/or tracing infrastructure before running
