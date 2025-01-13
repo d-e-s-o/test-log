@@ -70,3 +70,7 @@ tracing = {version = "0.1.20"}
 #
 # Probably fixed by https://github.com/rust-lang-nursery/lazy-static.rs/pull/107.
 _lazy_static_unused = { package = "lazy_static", version = "1.0.2" }
+
+[patch.crates-io]
+test-case = { git = "https://github.com/kezhuw/test-case.git", branch = "test-proc-macros-cooperation" }
+tokio = { git = "https://github.com/kezhuw/tokio.git", branch = "test-proc-macros-cooperation" }
