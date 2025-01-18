@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.17
+------
 - Changed default log level to `INFO`
 
 
