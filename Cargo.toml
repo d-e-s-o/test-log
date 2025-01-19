@@ -54,19 +54,3 @@ logging = {version = "0.4.8", package = "log"}
 test-case = {version = "3.1"}
 tokio = {version = "1.0", default-features = false, features = ["rt-multi-thread", "macros"]}
 tracing = {version = "0.1.20"}
-
-# error: cannot find macro `__lazy_static_internal` in this scope
-#   --> ~/.cargo/registry/src/github.com-1ecc6299db9ec823/sharded-slab-0.1.4/src/tid.rs:33:1
-#    |
-# 33 | / lazy_static! {
-# 34 | |     static ref REGISTRY: Registry = Registry {
-# 35 | |         next: AtomicUsize::new(0),
-# 36 | |         free: Mutex::new(VecDeque::new()),
-# 37 | |     };
-# 38 | | }
-#    | |_^
-#    |
-#    = note: this error originates in the macro `lazy_static` (in Nightly builds, run with -Z macro-backtrace for more info)
-#
-# Probably fixed by https://github.com/rust-lang-nursery/lazy-static.rs/pull/107.
-_lazy_static_unused = { package = "lazy_static", version = "1.0.2" }
