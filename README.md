@@ -1,3 +1,4 @@
+[<img src="https://api.gitsponsors.com/api/badge/img?id=183934105" height="20">](https://api.gitsponsors.com/api/badge/link?p=GUjR99HLkjdZOveSHxic8Md+hMcCFkSXKS7BQGa5VmCohyGqzv3tVCWQVAkUWXL9)
 [![pipeline](https://github.com/d-e-s-o/test-log/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/d-e-s-o/test-log/actions/workflows/test.yml)
 [![crates.io](https://img.shields.io/crates/v/test-log.svg)](https://crates.io/crates/test-log)
 [![Docs](https://docs.rs/test-log/badge.svg)][docs-rs]
