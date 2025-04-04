@@ -1,6 +1,6 @@
 [![pipeline](https://github.com/d-e-s-o/test-log/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/d-e-s-o/test-log/actions/workflows/test.yml)
 [![crates.io](https://img.shields.io/crates/v/test-log.svg)](https://crates.io/crates/test-log)
-[![Docs](https://docs.rs/test-log/badge.svg)][docs-rs]
+[![Docs](https://img.shields.io/docsrs/test-log/latest)][docs-rs]
 [![rustc](https://img.shields.io/badge/rustc-1.71+-blue.svg)](https://blog.rust-lang.org/2023/07/13/Rust-1.71.0.html)
 
 test-log
