@@ -77,7 +77,18 @@ async fn it_still_works() {
 }
 ```
 
-#### Features
+#### Cargo Feature Flags
+
+```toml
+# Cargo.toml
+[dependencies]
+# PICK ONE OF THE FOLLOWING:
+
+# Support log crate only (default)
+test-log = { version = "0.2" }
+# Support tracing crate
+test-log = { version = "0.2", features = [ "trace" ] }
+```
 
 The crate comes with two features pertaining "backend" initialization:
 - `log`, enabled by default, controls initialization for the `log`
