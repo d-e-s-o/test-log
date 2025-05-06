@@ -30,7 +30,7 @@ let _ = tracing_subscriber::fmt::init();
 ```
 
 **test-log** takes care of this per-test initialization that respects `cargo test` settings:
-By default logs are only shown when a test fails, but you can also use `cargo test --nocapture`
+By default logs are only shown when a test fails, but you can also use `cargo test -- --nocapture`
 to see logs for even for successful tests.
 
 Usage
