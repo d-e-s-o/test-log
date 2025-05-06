@@ -9,32 +9,29 @@ test-log
 - [Documentation][docs-rs]
 - [Changelog](CHANGELOG.md)
 
-**test-log** is a crate that takes care of automatically initializing
-logging and/or tracing for Rust tests.
+**test-log** automatically initializes logging during Rust Cargo tests.
 
-When running Rust tests it can often be helpful to have easy access to
-the verbose log messages emitted by the code under test. Commonly, these
-log messages may be coming from the [`log`][log] crate or being emitted
-through the [`tracing`][tracing] infrastructure.
+The problem with `cargo test` is that **log libraries** like 
+[`log`][log] or
+[`tracing`][tracing]
+**need to be initialized for the log messages to appear** in the terminal.
 
-The problem with either -- in the context of testing -- is that some
-form of initialization is required in order to make these crate's
-messages appear on a standard output stream.
-
-The commonly used [`env_logger`](https://crates.io/crates/env_logger)
-(which provides an easy way to configure `log` based logging), for
-example, needs to be initialized like this:
+For example, the `log` library needs to be initialized with an underlying crate like
+[`env_logger`](https://crates.io/crates/env_logger):
 ```rust
 let _ = env_logger::builder().is_test(true).try_init();
 ```
-in **each and every** test.
+in **every test function**!
 
-Similarly, `tracing` based solutions require a subscriber to be
-registered that writes events/spans to the terminal.
+Similarly, the `tracing` crate needs an ["subscriber"][tracing-subscriber]
+that writes events/spans to the terminal:
+```rust
+let _ = tracing_subscriber::fmt::init();
+```
 
-This crate takes care of this per-test initialization in an intuitive
-way.
-
+**test-log** takes care of this per-test initialization that respects `cargo test` settings:
+By default logs are only shown when a test fails, but you can also use `cargo test --nocapture`
+to see logs for even for successful tests.
 
 Usage
 -----
@@ -131,5 +128,6 @@ higher.
 [log]: https://crates.io/crates/log
 [tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
 [tracing]: https://crates.io/crates/tracing
+[tracing-subscriber]: https://crates.io/crates/tracing-subscriber
 [tracing-env-docs-rs]: https://docs.rs/tracing-subscriber/0.3.18/tracing_subscriber/filter/struct.EnvFilter.html#directives
 [tracing-events-docs-rs]: https://docs.rs/tracing-subscriber/0.3.18/tracing_subscriber/fmt/struct.SubscriberBuilder.html#method.with_span_events
