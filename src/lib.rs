@@ -61,6 +61,9 @@
 /// ```
 pub use test_log_macros::test;
 
+#[cfg(feature = "rstest")]
+pub use test_log_macros::rstest;
+
 #[cfg(feature = "trace")]
 #[doc(hidden)]
 pub use tracing_subscriber;

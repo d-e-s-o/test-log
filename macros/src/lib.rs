@@ -22,7 +22,45 @@ use syn::Meta;
 #[proc_macro_attribute]
 pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
   let item = parse_macro_input!(item as ItemFn);
-  try_test(attr, item)
+  let pre = if attr.is_empty() {
+    quote! { #[::core::prelude::v1::test] }
+  } else {
+    let attr_tokens: Tokens = attr.into();
+    quote! { #[ #attr_tokens ] }
+  };
+  try_test(pre, quote! {}, item)
+    .unwrap_or_else(syn::Error::into_compile_error)
+    .into()
+}
+
+#[cfg(feature = "rstest")]
+#[proc_macro_attribute]
+pub fn rstest(attr: TokenStream, item: TokenStream) -> TokenStream {
+  // the "full" rstest syntax looks like
+  //
+  // #[rstest]
+  // #[case(...)]
+  // #[case(...)]
+  // #[tokio::test]
+  // async fn test_blah(#[case] ...)
+  //
+  // We want to support a similar usage for test_log, so with this library the syntax looks like
+  //
+  // #[rstest(tokio::test)]
+  // #[case(...)]
+  // #[case(...)]
+  // async fn test_blah(#[case] ...)
+  //
+  // This means we need to set "pre" and "post" fields after the "ignored" attrs below
+  let item = parse_macro_input!(item as ItemFn);
+  let pre = quote! { #[::rstest::rstest] };
+  let post = if attr.is_empty() {
+    quote! {}
+  } else {
+    let attr_tokens: Tokens = attr.into();
+    quote! { #[ #attr_tokens ] }
+  };
+  try_test(pre, post, item)
     .unwrap_or_else(syn::Error::into_compile_error)
     .into()
 }
@@ -45,13 +83,7 @@ fn parse_attrs(attrs: Vec<Attribute>) -> syn::Result<(AttributeArgs, Vec<Attribu
   }
 }
 
-fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
-  let inner_test = if attr.is_empty() {
-    quote! { ::core::prelude::v1::test }
-  } else {
-    attr.into()
-  };
-
+fn try_test(pre: Tokens, post: Tokens, input: ItemFn) -> syn::Result<Tokens> {
   let ItemFn {
     attrs,
     vis,
@@ -64,8 +96,9 @@ fn try_test(attr: TokenStream, input: ItemFn) -> syn::Result<Tokens> {
   let tracing_init = expand_tracing_init(&attribute_args);
 
   let result = quote! {
-    #[#inner_test]
+    #pre
     #(#ignored_attrs)*
+    #post
     #vis #sig {
       // We put all initialization code into a separate module here in
       // order to prevent potential ambiguities that could result in

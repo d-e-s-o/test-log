@@ -99,6 +99,34 @@ async fn trace_with_tokio_attribute() {
   debug!("done");
 }
 
+#[cfg(feature = "rstest")]
+#[test_log::rstest]
+fn rstest() {
+  assert_eq!(2 + 2, 4);
+}
+
+#[cfg(feature = "rstest")]
+#[test_log::rstest(tokio::test)]
+async fn rstest_async() {
+  assert_eq!(async { 42 }.await, 42)
+}
+
+#[cfg(feature = "rstest")]
+#[test_log::rstest]
+#[case(1)]
+#[case(2)]
+fn rstest_with_cases(#[case] val: i64) {
+  assert_eq!(val, val);
+}
+
+#[cfg(feature = "rstest")]
+#[test_log::rstest(tokio::test)]
+#[case(1)]
+#[case(2)]
+async fn rstest_with_cases_async(#[case] val: i64) {
+  assert_eq!(async { val }.await, val);
+}
+
 #[cfg(feature = "unstable")]
 #[test_log::test(tokio::test)]
 #[test_log(default_log_filter = "info")]

@@ -36,7 +36,7 @@ jobs:
       run: |
         cargo build --profile=${{ matrix.profile }}
         cargo build --all-features --profile=${{ matrix.profile }}
-        cargo test --profile=${{ matrix.profile }}
+        cargo test --profile=${{ matrix.profile }} --features rstest
   build-minimum:
     name: Build using minimum versions of dependencies
     runs-on: ubuntu-latest

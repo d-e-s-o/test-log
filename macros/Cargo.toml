@@ -16,6 +16,7 @@ proc-macro = true
 [features]
 trace = []
 log = []
+rstest = []
 unstable = []
 
 [dependencies]

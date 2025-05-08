@@ -84,6 +84,8 @@ The crate comes with two features pertaining "backend" initialization:
   crate.
 - `trace`, disabled by default, controls initialization for the
   `tracing` crate.
+- `rstest`, disabled by default, allows usage of this library with
+  [rstest](https://github.com/la10736/rstest)
 
 Depending on what backend the crate-under-test (and its dependencies)
 use, the respective feature(s) should be enabled to make messages that
@@ -91,6 +93,39 @@ are emitted by the test manifest on the terminal.
 
 On top of that, the `color` feature (enabled by default) controls
 whether to color output by default.
+
+#### Usage with rstest
+
+The same syntax is supported for rstest as with regular tests, just
+with swapping out `rstest` for `test`:
+```rust
+use test_log::rstest;
+
+#[rstest]
+fn it_works() {
+  info!("Checking whether it still works...");
+  assert_eq!(2 + 2, 4);
+  info!("Looks good!");
+}
+```
+
+You can use `#[case]` statements as normal:
+```rust
+#[rstest]
+#[case(4)]
+fn it_works(#[case] val: i64) {
+  // ...
+}
+```
+
+As well as wrapping other attributes, such as `tokio::test`:
+```rust
+#[rstest(tokio::test)]
+#[case(4)]
+async fn it_works(#[case] val: i64) {
+  // ...
+}
+```
 
 #### Logging Configuration
 

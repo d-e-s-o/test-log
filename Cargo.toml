@@ -30,13 +30,14 @@ include = ["src/lib.rs", "LICENSE-*", "README.md", "CHANGELOG.md"]
 [[test]]
 name = "default_log_filter"
 path = "tests/default_log_filter.rs"
-required-features = ["log", "unstable"]
+required-features = ["log", "rstest", "unstable"]
 
 [features]
 default = ["log", "color"]
 trace = ["dep:tracing-subscriber", "test-log-macros/trace"]
 log = ["dep:env_logger", "test-log-macros/log", "tracing-subscriber?/tracing-log"]
 color = ["env_logger?/auto-color", "tracing-subscriber?/ansi"]
+rstest = ["test-log-macros/rstest"]
 # Enable unstable features. These are generally exempt from any semantic
 # versioning guarantees.
 unstable = ["test-log-macros/unstable"]
@@ -52,5 +53,6 @@ env_logger = {version = "0.11", default-features = false, optional = true}
 [dev-dependencies]
 logging = {version = "0.4.8", package = "log"}
 test-case = {version = "3.1"}
+rstest = {version = "0.25.0"}
 tokio = {version = "1.0", default-features = false, features = ["rt-multi-thread", "macros"]}
 tracing = {version = "0.1.20"}
