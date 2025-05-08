@@ -84,10 +84,12 @@ async fn it_still_works() {
 [dependencies]
 # PICK ONE OF THE FOLLOWING:
 
-# Support log crate only (default)
-test-log = { version = "0.2" }
-# Support tracing crate
-test-log = { version = "0.2", features = [ "trace" ] }
+# Support `log` crate only (default).
+test-log = {version = "0.2"}
+# Support `log` and `tracing` crates.
+test-log = {version = "0.2", features = ["trace"]}
+# Support only `tracing` crate.
+test-log = {version = "0.2", default-features = false, features = ["trace"]}
 ```
 
 The crate comes with two features pertaining "backend" initialization:
