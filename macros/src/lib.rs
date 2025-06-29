@@ -158,7 +158,7 @@ fn expand_logging_init(attribute_args: &AttributeArgs) -> Tokens {
   let default_filter = attribute_args
     .default_log_filter
     .as_ref()
-    .unwrap_or(&::std::borrow::Cow::Borrowed("info"));
+    .unwrap_or(&Cow::Borrowed("info"));
 
   quote! {
     {

@@ -1,7 +1,5 @@
-// Copyright (C) 2019-2024 Daniel Mueller <deso@posteo.net>
+// Copyright (C) 2019-2025 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
-
-#![allow(clippy::eq_op)]
 
 use tokio::runtime::Builder;
 
