@@ -1,7 +1,7 @@
-Unreleased
-----------
+0.2.18
+------
 - Improved cooperation with other similar procedural macros to enable
-  stacking
+  attribute stacking
 
 
 0.2.17

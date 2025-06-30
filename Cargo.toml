@@ -35,7 +35,7 @@ wildcard-imports = "warn"
 
 [package]
 name = "test-log"
-version = "0.2.17"
+version = "0.2.18"
 authors = ["Daniel Mueller <deso@posteo.net>"]
 edition = "2021"
 rust-version = "1.71"
@@ -77,7 +77,7 @@ color = ["env_logger?/auto-color", "tracing-subscriber?/ansi"]
 unstable = ["test-log-macros/unstable"]
 
 [dependencies]
-test-log-macros = {version = "0.2.15", path = "macros"}
+test-log-macros = {version = "0.2.18", path = "macros"}
 tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"]}
 env_logger = {version = "0.11", default-features = false, optional = true}
 
