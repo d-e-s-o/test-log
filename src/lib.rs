@@ -30,7 +30,7 @@
 ///
 /// It can be very convenient to convert over all tests by overriding
 /// the `#[test]` attribute on a per-module basis:
-/// ```rust,no_run
+/// ```rust
 /// use test_log::test;
 ///
 /// #[test]
@@ -39,14 +39,29 @@
 /// }
 /// ```
 ///
-/// You can also wrap another attribute. For example, suppose you use
-/// [`#[tokio::test]`](https://docs.rs/tokio/1.4.0/tokio/attr.test.html)
-/// to run async tests:
+/// The crate also supports stacking with other `#[test]` attributes.
+/// For example, you can stack
+/// [`#[tokio::test]`](https://docs.rs/tokio/1.45.1/tokio/attr.test.html)
+/// on top of this crate's `#[test]` attribute and test `async`
+/// functionality this way:
+///
+/// ```rust
+/// #[tokio::test]
+/// #[test_log::test]
+/// async fn it_still_works() {
+///   // ...
+/// }
 /// ```
+///
+/// Note that stacking `#[test]` attributes this way requires some minimal
+/// level of cooperation from the other crate to work properly (see
+/// [#46](https://github.com/d-e-s-o/test-log/pull/46) for details), but as
+/// a fallback a wrapping style can be used as well:
+/// ```rust
 /// use test_log::test;
 ///
 /// #[test(tokio::test)]
-/// async fn it_still_works() {
+/// async fn it_also_works() {
 ///   // ...
 /// }
 /// ```

@@ -66,13 +66,27 @@ fn it_still_works() {
 }
 ```
 
-You can also wrap another attribute. For example, suppose you use
-[`#[tokio::test]`][tokio-test] to run async tests:
+The crate also supports stacking with other `#[test]` attributes.
+For example, you can stack [`#[tokio::test]`][tokio-test] on top of this
+crate's `#[test]` attribute and test `async` functionality this way:
+
+```rust
+#[tokio::test]
+#[test_log::test]
+async fn it_still_works() {
+  // ...
+}
+```
+
+Note that stacking `#[test]` attributes this way requires some minimal
+level of cooperation from the other crate to work properly (see
+[#46](https://github.com/d-e-s-o/test-log/pull/46) for details), but as
+a fallback a wrapping style can be used as well:
 ```rust
 use test_log::test;
 
 #[test(tokio::test)]
-async fn it_still_works() {
+async fn it_also_works() {
   // ...
 }
 ```
@@ -142,7 +156,7 @@ higher.
 [docs-rs]: https://docs.rs/test-log
 [env-docs-rs]: https://docs.rs/env_logger/0.11.2/env_logger
 [log]: https://crates.io/crates/log
-[tokio-test]: https://docs.rs/tokio/1.4.0/tokio/attr.test.html
+[tokio-test]: https://docs.rs/tokio/1.45.1/tokio/attr.test.html
 [tracing]: https://crates.io/crates/tracing
 [tracing-env-docs-rs]: https://docs.rs/tracing-subscriber/0.3.18/tracing_subscriber/filter/struct.EnvFilter.html#directives
 [tracing-events-docs-rs]: https://docs.rs/tracing-subscriber/0.3.18/tracing_subscriber/fmt/struct.SubscriberBuilder.html#method.with_span_events
