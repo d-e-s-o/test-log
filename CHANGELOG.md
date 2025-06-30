@@ -1,3 +1,9 @@
+Unreleased
+----------
+- Improved cooperation with other similar procedural macros to enable
+  stacking
+
+
 0.2.17
 ------
 - Changed default log level to `INFO`
