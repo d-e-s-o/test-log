@@ -1,7 +1,7 @@
 [workspace]
 members = ["macros"]
 
-[lworkspace.ints.rust]
+[workspace.lints.rust]
 deprecated-safe = "warn"
 future-incompatible = "warn"
 keyword-idents = "warn"

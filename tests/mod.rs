@@ -1,6 +1,8 @@
 // Copyright (C) 2019-2025 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+//! Tests for test-log.
+
 use rstest::rstest;
 
 use tokio::runtime::Builder;

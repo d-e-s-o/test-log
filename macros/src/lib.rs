@@ -1,7 +1,7 @@
 // Copyright (C) 2019-2025 Daniel Mueller <deso@posteo.net>
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-extern crate proc_macro;
+//! Procedural macro powering `test-log`.
 
 use std::borrow::Cow;
 
@@ -19,6 +19,8 @@ use syn::Lit;
 use syn::Meta;
 
 
+// Documented in `test-log` crate's re-export.
+#[allow(missing_docs)]
 #[proc_macro_attribute]
 pub fn test(attr: TokenStream, item: TokenStream) -> TokenStream {
   let item = parse_macro_input!(item as ItemFn);
