@@ -82,11 +82,11 @@ tracing-subscriber = {version = "0.3.17", default-features = false, optional = t
 env_logger = {version = "0.11", default-features = false, optional = true}
 
 [dev-dependencies]
-logging = {version = "0.4.8", package = "log"}
-rstest = "0.26.1"
-test-case = {version = "3.1"}
+logging = {version = "0.4", package = "log"}
+rstest = "0.26"
+test-case = "3.1"
 tokio = {version = "1.38", default-features = false, features = ["rt-multi-thread", "macros"]}
-tracing = {version = "0.1.20"}
+tracing = "0.1"
 
 [lints]
 workspace = true
