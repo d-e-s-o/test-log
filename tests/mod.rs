@@ -172,7 +172,7 @@ trait Foo: Sized {
 
 impl<T> Foo for T {}
 
-/// Make sure that Foo::map does not interfere with generated
+/// Make sure that `Foo::map` does not interfere with generated
 /// initialization code.
 #[test_log::test]
 fn unambiguous_map() {}
