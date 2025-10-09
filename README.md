@@ -95,7 +95,7 @@ async fn it_also_works() {
 
 ```toml
 # Cargo.toml
-[dependencies]
+[dev-dependencies]
 # PICK ONE OF THE FOLLOWING:
 
 # Support `log` crate only (default).
