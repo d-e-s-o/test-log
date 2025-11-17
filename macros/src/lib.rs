@@ -242,6 +242,19 @@ fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
     }
   };
 
+  #[cfg(feature = "color")]
+  let fmt_pretty = quote! {
+        Some("pretty") => {
+            builder.pretty().try_init()
+        }
+  };
+  #[cfg(not(feature = "color"))]
+  let fmt_pretty = quote! {
+        Some("pretty") => {
+            panic!("test-log: RUST_TRACING_FORMAT using 'pretty' requires the 'color' feature");
+        }
+  };
+
   quote! {
     {
       let __internal_event_filter = {
@@ -271,11 +284,23 @@ fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
         }
       };
 
-      let _ = ::test_log::tracing_subscriber::FmtSubscriber::builder()
+      let builder = ::test_log::tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(#env_filter)
         .with_span_events(__internal_event_filter)
-        .with_test_writer()
-        .try_init();
+        .with_test_writer();
+
+      let _ = match ::std::env::var_os("RUST_TRACING_FORMAT").as_deref().and_then(std::ffi::OsStr::to_str) {
+        None | Some("full") => {
+            builder.try_init()
+        }
+        Some("compact") => {
+            builder.compact().try_init()
+        },
+        #fmt_pretty,
+        Some(other) => {
+            panic!("test-log: RUST_TRACING_FORMAT has an unsupported value of '{other}'. Supported are: full, compact, pretty.");
+        }
+      };
     }
   }
 }

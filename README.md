@@ -145,6 +145,10 @@ Valid events are `new`, `enter`, `exit`, `close`, `active`, and `full`.
 See the [`tracing_subscriber` docs][tracing-events-docs-rs] for details
 on what the events mean.
 
+It is also possible to use different tracing formatters using the
+`RUST_TRACING_FORMAT` variable. Supported values are: `full` (default),
+`compact`, and `pretty`.
+
 #### MSRV Policy
 This crate adheres to Cargo's [semantic versioning rules][cargo-semver].
 At a minimum, it builds with the most recent Rust stable release minus

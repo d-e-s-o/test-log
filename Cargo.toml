@@ -71,7 +71,7 @@ required-features = ["log", "unstable"]
 default = ["log", "color"]
 trace = ["dep:tracing-subscriber", "test-log-macros/trace"]
 log = ["dep:env_logger", "test-log-macros/log", "tracing-subscriber?/tracing-log"]
-color = ["env_logger?/auto-color", "tracing-subscriber?/ansi"]
+color = ["env_logger?/auto-color", "tracing-subscriber?/ansi", "test-log-macros/color"]
 # Enable unstable features. These are generally exempt from any semantic
 # versioning guarantees.
 unstable = ["test-log-macros/unstable"]
