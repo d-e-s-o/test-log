@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.19
+------
 - Adjusted `tracing` output to log to `stderr`
 
 
