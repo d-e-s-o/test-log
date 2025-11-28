@@ -208,6 +208,7 @@ fn expand_logging_init(attribute_args: &AttributeArgs) -> Tokens {
           ::test_log::env_logger::Env::default()
             .default_filter_or(#default_filter)
         )
+        .target(::test_log::env_logger::Target::Stderr)
         .is_test(true)
         .try_init();
     }
@@ -274,7 +275,7 @@ fn expand_tracing_init(attribute_args: &AttributeArgs) -> Tokens {
       let _ = ::test_log::tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter(#env_filter)
         .with_span_events(__internal_event_filter)
-        .with_test_writer()
+        .with_writer(::test_log::tracing_subscriber::fmt::TestWriter::with_stderr)
         .try_init();
     }
   }

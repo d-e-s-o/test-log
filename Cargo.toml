@@ -78,7 +78,7 @@ unstable = ["test-log-macros/unstable"]
 
 [dependencies]
 test-log-macros = {version = "0.2.18", path = "macros"}
-tracing-subscriber = {version = "0.3.17", default-features = false, optional = true, features = ["env-filter", "fmt"]}
+tracing-subscriber = {version = "0.3.20", default-features = false, optional = true, features = ["env-filter", "fmt"]}
 env_logger = {version = "0.11", default-features = false, optional = true}
 
 [dev-dependencies]
@@ -87,6 +87,13 @@ rstest = "0.26"
 test-case = "3.1"
 tokio = {version = "1.38", default-features = false, features = ["rt-multi-thread", "macros"]}
 tracing = "0.1"
+
+# A set of unused dependencies that we require to force correct minimum
+# versions of transitive dependencies, for cases where our dependencies
+# have incorrect dependency specifications themselves.
+
+# error: cannot find macro `__lazy_static_internal` in this scope
+_lazy_static_unused = { package = "lazy_static", version = "1.0.2" }
 
 [lints]
 workspace = true

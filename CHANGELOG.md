@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Adjusted `tracing` output to log to `stderr`
+
+
 0.2.18
 ------
 - Improved cooperation with other similar procedural macros to enable
