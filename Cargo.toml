@@ -51,6 +51,7 @@ rust-version.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/test-log"
 readme = "README.md"
 categories = [
   "development-tools::testing",
