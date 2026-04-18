@@ -22,7 +22,7 @@ unstable = ["test-log-core/unstable"]
 
 [dependencies]
 syn = { version = "2.0", default-features = false, features = ["full", "parsing", "proc-macro"] }
-test-log-core = { version = "=0.2.19", path = "../core", default-features = false }
+test-log-core = { version = "=0.2.20", path = "../core", default-features = false }
 
 [lints]
 workspace = true

@@ -10,6 +10,7 @@ repository.workspace = true
 description = """
 Core logic for the test-log procedural macro.
 """
+include = ["src/lib.rs", "LICENSE-*"]
 
 [features]
 default = ["log"]
@@ -22,7 +23,7 @@ name = "failures"
 required-features = ["unstable"]
 
 [dependencies]
-proc-macro2 = { version = "1.0.32", default-features = false }
+proc-macro2 = { version = "1.0", default-features = false }
 quote = { version = "1.0", default-features = false }
 syn = { version = "2.0", default-features = false, features = ["full", "parsing", "printing", "proc-macro"] }
 

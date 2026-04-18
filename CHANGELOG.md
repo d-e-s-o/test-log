@@ -1,3 +1,8 @@
+0.2.20
+------
+- Factored out `test-log-core` crate to facilitate better testing
+
+
 0.2.19
 ------
 - Adjusted `tracing` output to log to `stderr`
