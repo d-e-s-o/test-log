@@ -23,20 +23,9 @@ jobs:
         #   file://<path>/<crate>#<version>
         # but could also be along the lines of
         #   file://<path>/<crate>#<actual-crate-name>@<version>
-        version="$(echo ${pkgid}                   | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
-        macros_version="$(cd macros && cargo pkgid | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
-        core_version="$(cd core && cargo pkgid     | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
-
+        version="$(echo ${pkgid} | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
         if [ -z "${version}" ]; then
           echo "Invalid version string: ${pkgid}"
-          exit 1
-        fi
-        if [ "${version}" != "${macros_version}" ]; then
-          echo "test-log and test-log-macros have differing version (${version} vs. ${macros_version}"
-          exit 1
-        fi
-        if [ "${version}" != "${core_version}" ]; then
-          echo "test-log and test-log-core have differing version (${version} vs. ${core_version}"
           exit 1
         fi
         echo "Determined crate version: ${version}"
