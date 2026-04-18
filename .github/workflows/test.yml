@@ -1,4 +1,4 @@
-# Copyright (C) 2022-2025 Daniel Mueller <deso@posteo.net>
+# Copyright (C) 2022-2026 Daniel Mueller <deso@posteo.net>
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 name: Test
@@ -17,13 +17,19 @@ env:
 
 jobs:
   test:
-    name: Build and test [${{ matrix.rust }}, ${{ matrix.profile }}]
+    name: Build and test [${{ matrix.rust }}, ${{ matrix.profile }}, ${{ matrix.args || 'default' }}]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         rust: [stable]
         profile: [dev, release]
+        args:
+        - ""
+        - "--no-default-features"
+        - "--no-default-features --features trace"
+        - "--features trace"
+        - "--all-features"
     steps:
     - uses: actions/checkout@v6
     - uses: dtolnay/rust-toolchain@master
@@ -31,12 +37,11 @@ jobs:
         toolchain: ${{ matrix.rust }}
     - uses: Swatinem/rust-cache@v2
       with:
-        key: ${{ matrix.profile }}
+        key: ${{ matrix.profile }}-${{ strategy.job-index }}
     - name: Build & test
       run: |
-        cargo build --profile=${{ matrix.profile }}
-        cargo build --all-features --profile=${{ matrix.profile }}
-        cargo test --profile=${{ matrix.profile }}
+        cargo build --profile=${{ matrix.profile }} ${{ matrix.args }}
+        cargo test --profile=${{ matrix.profile }} --workspace ${{ matrix.args }}
   build-minimum:
     name: Build using minimum versions of dependencies
     runs-on: ubuntu-latest
