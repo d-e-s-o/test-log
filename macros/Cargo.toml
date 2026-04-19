@@ -15,14 +15,14 @@ Supporting procedural macro crate for test-log.
 proc-macro = true
 
 [features]
-trace = []
-log = []
-unstable = []
+default = ["log"]
+trace = ["test-log-core/trace"]
+log = ["test-log-core/log"]
+unstable = ["test-log-core/unstable"]
 
 [dependencies]
-proc-macro2 = { version = "1.0.32", default-features = false }
-quote = { version = "1.0", default-features = false }
-syn = { version = "2.0", default-features = false, features = ["full", "parsing", "printing", "proc-macro"] }
+syn = { version = "2.0", default-features = false, features = ["full", "parsing", "proc-macro"] }
+test-log-core = { version = "=0.2.19", path = "../core", default-features = false }
 
 [lints]
 workspace = true

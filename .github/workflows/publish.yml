@@ -25,6 +25,7 @@ jobs:
         #   file://<path>/<crate>#<actual-crate-name>@<version>
         version="$(echo ${pkgid}                   | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
         macros_version="$(cd macros && cargo pkgid | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
+        core_version="$(cd core && cargo pkgid     | cut -d '#' -f2 | cut -d '@' -f2 | grep -o '[^:]*$')"
 
         if [ -z "${version}" ]; then
           echo "Invalid version string: ${pkgid}"
@@ -32,6 +33,10 @@ jobs:
         fi
         if [ "${version}" != "${macros_version}" ]; then
           echo "test-log and test-log-macros have differing version (${version} vs. ${macros_version}"
+          exit 1
+        fi
+        if [ "${version}" != "${core_version}" ]; then
+          echo "test-log and test-log-core have differing version (${version} vs. ${core_version}"
           exit 1
         fi
         echo "Determined crate version: ${version}"
@@ -47,8 +52,8 @@ jobs:
     - uses: dtolnay/rust-toolchain@stable
     - name: Dry-run package creation
       # Can't verify test-log for it may depend on yet-to-be-published
-      # test-log-macros.
-      run: cargo package --package macros --workspace --exclude test-log
+      # test-log-macros and test-log-core.
+      run: cargo package --package test-log-core --package test-log-macros --workspace --exclude test-log
     - name: Create git tag
       env:
         version: ${{ needs.version.outputs.version }}

@@ -1,0 +1,26 @@
+[package]
+name = "test-log-core"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+description = """
+Core logic for the test-log procedural macro.
+"""
+
+[features]
+default = ["log"]
+trace = []
+log = []
+unstable = []
+
+[dependencies]
+proc-macro2 = { version = "1.0.32", default-features = false }
+quote = { version = "1.0", default-features = false }
+syn = { version = "2.0", default-features = false, features = ["full", "parsing", "printing", "proc-macro"] }
+
+[lints]
+workspace = true
