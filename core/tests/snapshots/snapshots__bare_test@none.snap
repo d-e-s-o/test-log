@@ -1,0 +1,14 @@
+---
+source: core/tests/snapshots.rs
+expression: output
+---
+#[::core::prelude::v1::test]
+fn it_works() {
+  mod init {
+    pub fn init() {}
+  }
+  init::init();
+  {
+    assert_eq!(2 + 2, 4);
+  }
+}

@@ -1,0 +1,12 @@
+---
+source: core/tests/snapshots.rs
+expression: output
+---
+#[::core::prelude::v1::test]
+fn returns_result() -> Result<(), String> {
+  mod init {
+    pub fn init() {}
+  }
+  init::init();
+  { Ok(()) }
+}

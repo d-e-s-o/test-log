@@ -1,0 +1,12 @@
+---
+source: core/tests/snapshots.rs
+expression: output
+---
+#[test]
+fn already_has_test() {
+  mod init {
+    pub fn init() {}
+  }
+  init::init();
+  {}
+}

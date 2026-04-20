@@ -22,5 +22,11 @@ proc-macro2 = { version = "1.0.32", default-features = false }
 quote = { version = "1.0", default-features = false }
 syn = { version = "2.0", default-features = false, features = ["full", "parsing", "printing", "proc-macro"] }
 
+[dev-dependencies]
+insta = { version = "1.47", default-features = false }
+prettyplease = "0.2"
+quote = { version = "1.0" }
+syn = { version = "2.0", features = ["full", "parsing"] }
+
 [lints]
 workspace = true
