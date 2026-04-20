@@ -17,6 +17,10 @@ trace = []
 log = []
 unstable = []
 
+[[test]]
+name = "failures"
+required-features = ["unstable"]
+
 [dependencies]
 proc-macro2 = { version = "1.0.32", default-features = false }
 quote = { version = "1.0", default-features = false }
