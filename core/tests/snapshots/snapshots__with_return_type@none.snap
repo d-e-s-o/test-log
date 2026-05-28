@@ -8,5 +8,5 @@ fn returns_result() -> Result<(), String> {
     pub fn init() {}
   }
   init::init();
-  { Ok(()) }
+  Ok(())
 }

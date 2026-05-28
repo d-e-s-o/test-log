@@ -18,5 +18,5 @@ fn returns_result() -> Result<(), String> {
     }
   }
   init::init();
-  { Ok(()) }
+  Ok(())
 }

@@ -8,7 +8,5 @@ fn it_works() {
     pub fn init() {}
   }
   init::init();
-  {
-    assert_eq!(2 + 2, 4);
-  }
+  assert_eq!(2 + 2, 4);
 }
