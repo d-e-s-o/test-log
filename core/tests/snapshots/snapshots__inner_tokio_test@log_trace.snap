@@ -59,7 +59,5 @@ async fn with_async() {
     }
   }
   init::init();
-  {
-    assert_eq!(async { 42 } . await, 42);
-  }
+  assert_eq!(async { 42 } . await, 42);
 }

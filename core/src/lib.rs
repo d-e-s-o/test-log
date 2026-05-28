@@ -75,7 +75,7 @@ pub fn try_test(attr: Tokens, input: ItemFn) -> syn::Result<Tokens> {
     attrs,
     vis,
     sig,
-    block,
+    mut block,
   } = input;
 
   let (attribute_args, ignored_attrs) = parse_attrs(attrs)?;
@@ -94,11 +94,14 @@ pub fn try_test(attr: Tokens, input: ItemFn) -> syn::Result<Tokens> {
     (quote! { #[#attr] }, quote! {})
   };
 
-  let result = quote! {
-    #inner_test
-    #(#ignored_attrs)*
-    #generated_test
-    #vis #sig {
+  // Splice the initialization prologue into the existing block, so that
+  // the fn body keeps its original source spans. Building a fresh outer
+  // block with `quote!` here would give it a span covering the whole
+  // annotated fn. That makes rust-analyzer generate spurious
+  // jump-to-definition results for code inside the test; see
+  // <https://github.com/rust-lang/rust-analyzer/issues/20441>.
+  let prologue = quote! {
+    {
       // We put all initialization code into a separate module here in
       // order to prevent potential ambiguities that could result in
       // compilation errors. E.g., client code could use traits that
@@ -117,9 +120,16 @@ pub fn try_test(attr: Tokens, input: ItemFn) -> syn::Result<Tokens> {
       }
 
       init::init();
-
-      #block
     }
+  };
+  let prologue_stmts = syn::parse2::<syn::Block>(prologue)?.stmts;
+  block.stmts.splice(0..0, prologue_stmts);
+
+  let result = quote! {
+    #inner_test
+    #(#ignored_attrs)*
+    #generated_test
+    #vis #sig #block
   };
   Ok(result)
 }

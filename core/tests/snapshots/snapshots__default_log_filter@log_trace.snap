@@ -60,5 +60,4 @@ fn with_filter() {
     }
   }
   init::init();
-  {}
 }

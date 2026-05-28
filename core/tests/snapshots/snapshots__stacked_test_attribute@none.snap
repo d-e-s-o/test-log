@@ -8,5 +8,4 @@ fn already_has_test() {
     pub fn init() {}
   }
   init::init();
-  {}
 }
