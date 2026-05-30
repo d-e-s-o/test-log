@@ -177,6 +177,23 @@ impl<T> Foo for T {}
 #[test_log::test]
 fn unambiguous_map() {}
 
+// The macro-injected `init` module shouldn't affect the scope of user code.
+mod init {
+  pub const VALUE: u32 = 6;
+}
+
+#[test_log::test]
+fn outer_mod_init() {
+  assert_eq!(init::VALUE, 6);
+}
+
+#[test_log::test]
+fn inner_mod_init() {
+  mod init {
+    pub const VALUE: u32 = 7;
+  }
+  assert_eq!(init::VALUE, 7);
+}
 
 /// A module used for testing the `test` attribute after importing it
 /// via `use` instead of using fuller qualified syntax.

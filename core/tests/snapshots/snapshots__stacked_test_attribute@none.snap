@@ -4,8 +4,10 @@ expression: output
 ---
 #[test]
 fn already_has_test() {
-  mod init {
-    pub fn init() {}
+  {
+    mod init {
+      pub fn init() {}
+    }
+    init::init();
   }
-  init::init();
 }
