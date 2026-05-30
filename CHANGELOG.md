@@ -1,5 +1,5 @@
-Unreleased
-----------
+0.2.21
+------
 - Fixed spans in generated code, improving `rust-analyzer` interaction
 
 
