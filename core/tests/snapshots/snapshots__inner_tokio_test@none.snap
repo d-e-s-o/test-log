@@ -4,9 +4,11 @@ expression: output
 ---
 #[tokio::test]
 async fn with_async() {
-  mod init {
-    pub fn init() {}
+  {
+    mod init {
+      pub fn init() {}
+    }
+    init::init();
   }
-  init::init();
   assert_eq!(async { 42 } . await, 42);
 }

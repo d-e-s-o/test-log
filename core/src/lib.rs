@@ -94,7 +94,7 @@ pub fn try_test(attr: Tokens, input: ItemFn) -> syn::Result<Tokens> {
     (quote! { #[#attr] }, quote! {})
   };
 
-  // Splice the initialization prologue into the existing block, so that
+  // Insert the initialization prologue into the existing block, so that
   // the fn body keeps its original source spans. Building a fresh outer
   // block with `quote!` here would give it a span covering the whole
   // annotated fn. That makes rust-analyzer generate spurious
@@ -122,8 +122,8 @@ pub fn try_test(attr: Tokens, input: ItemFn) -> syn::Result<Tokens> {
       init::init();
     }
   };
-  let prologue_stmts = syn::parse2::<syn::Block>(prologue)?.stmts;
-  block.stmts.splice(0..0, prologue_stmts);
+  let prologue_block: syn::Stmt = syn::parse2(prologue)?;
+  block.stmts.insert(0, prologue_block);
 
   let result = quote! {
     #inner_test
