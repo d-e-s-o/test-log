@@ -1,3 +1,8 @@
+Unreleased
+----------
+- Fixed spans in generated code, improving `rust-analyzer` interaction
+
+
 0.2.20
 ------
 - Factored out `test-log-core` crate to facilitate better testing
