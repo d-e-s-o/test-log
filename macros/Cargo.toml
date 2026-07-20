@@ -21,7 +21,7 @@ log = ["test-log-core/log"]
 unstable = ["test-log-core/unstable"]
 
 [dependencies]
-syn = { version = "2.0", default-features = false, features = ["full", "parsing", "proc-macro"] }
+syn = { version = "3.0", default-features = false, features = ["full", "parsing", "proc-macro"] }
 test-log-core = { version = "=0.2.21", path = "../core", default-features = false }
 
 [lints]
